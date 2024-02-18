@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+        <title>shree shanta hostel management systems</title>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="navbar_college" >
+                    <img height="70" width="190" src="./assets/banasthali_vidyapith_logo.jpeg" alt="logo" class="college_logo"/>
+                </div>
+                <div class="navbar_nav_items">
+                    <div class="nav_item_1">
+                        <button class="button__primary_1"><a href="">Home</a></button>
+                        <button class="button__primary"> About us </button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    <main class="container">
+        <section class="hero_container">
+            <div class="heroo">
+                    <img height="290" width="330" src="assets/college-student-read-book-illustration_614304-33.jpg" alt="logo" class="college_logo"/>
+                    <div class="hero_content"> 
+                        Welcome Students, to our Room Allocation portal – your key to a seamless and stress-free housing experience!<br>
+                        We understand the importance of finding the perfect living space that complements your academic journey,<br>
+                        and we're thrilled to be your guide in this exciting chapter of your life. <br>
+                    </div>
+            </div> 
+        <div class="herooo">
+            <img height="900" width="800"  src="assets/entry_form_pic.avif" alt="logooo" class="college_logo1"/>
+        </div>
+            <div class="hero_content_1"> 
+               <b> Please take a few moments <br>
+                to provide us with essential <br> 
+                details about your preferences <br>
+                and requirements. Your input is <br> 
+                crucial in  ensuring that we can <br> 
+                offer you the best possible <br> 
+                living arrangements.<br>
+                <br>
+                Rest assured, your information <br>
+                will be handled with the utmost<br>
+                confidentiality and used exclusively <br> 
+                for the purpose of room allocation.<br></b>
+                <div class="stu_form">
+                <button class="button__primary"><a href="http://localhost:3060">Student Form</a>  </button>
+            </div>
+        </div>
+        <div class="hero_content_2">
+            <div class="hero_content_21"> 
+                <b> 
+                    Want to Update your details?
+                 </b>
+            </div>
+            <div class="hero_content_22"> 
+                <b> 
+                    Don't worry , we have got you covered.
+                 </b>
+            </div>
+            <div class="hero_content_23"> 
+                <b> 
+                    You can send us a request to update your details.
+                 </b>
+            </div>
+        </div>
+        <div class="heroooo">
+            <img height="800" width="800" src="assets/19199192.jpg" alt="logoooo" class="college_logo2" />
+        </div>
+        <form class="form_container" action="student-pagee/index.html/submit" method="post">
+            <div class="form_int">
+                <h2>
+            <div class="course_container">
+                <label for="detail_type">Select Detail Type</label><br>
+                <select id="detail_type" name="detail_type">
+                  <option value="none">None</option>
+                  <option value="email">Email Id</option>
+                  <option value="number">Phone Number</option>
+                  <option value="parents">Parent's Phone Number</option>
+                  <option value="address">Address</option>
+                  <option value="city">City</option>
+                  <option value="state">State</option>
+                  <option value="pincode">Pincode</option>
+                </select><br>
+            
+        
+            <label for="current">Current Detail</label><br>
+            <input type="text" id="current" name="current" required><br>
+        
+            <label for="detail_new">New Detail</label><br>
+            <input type="text" id="detail_new" name="detail_new" required><br>
+        
+          
+            <button class="button__primary_3" type="submit" id="submit">Send Request</button><br>
+        </h2>
+            </div>
+          </form>       
+        <div class="complain_box">
+            <form action="student-pagee/index.html/send" method="post">
+            <div class="complain_text">
+              <b>  
+                Your satisfaction is our top priority, and we value your feedback to continuously improve our services. We have introduced a Complaints and Reviews Box to provide you with a platform to share your experiences, concerns, and suggestions.
+            </b>
+            </div>
+            <div class="complain_img">
+                <img height="750" width="750" src="assets/complain.jpg"alt="complain" class="college_complain" />
+            </div>
+            <div class="complain_write">
+                <div class="watermark">Text Here</div>
+            <textarea id="complain" name="complain" rows="30" cols="100" required ></textarea>
+            </div>
+            <div class="send_button">
+            <button class="button__primary" type="submit" id="send"> Send </button>
+            </div>
+            </form>
+        </div>
+        </div>
+        </div>
+ 
+    </body>
+</html>
