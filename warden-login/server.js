@@ -41,12 +41,12 @@ app.get('/', (req, res) => {
 
 
 // Route to handle form submission and update data
-app.post('/student-login/index.html/submit', (req, res) => {
-    console.log('POST request received at /student-login/index.html/submit');
+app.post('/warden-login/index.html/submit', (req, res) => {
+    console.log('POST request received at /warden-login/index.html/submit');
     const {loginId, password } = req.body;
     console.log('Received loginId:', loginId);
     console.log('Received password:', password);
-    const sql = 'SELECT username,pswd FROM user_master_tbl WHERE username = ? and u_type="student"';
+    const sql = 'SELECT username,pswd FROM user_master_tbl WHERE username = ? and u_type in("head","assistant")';
     console.log(sql);
     connection.query(sql, [loginId], (err, result) => {
         if (err) {
