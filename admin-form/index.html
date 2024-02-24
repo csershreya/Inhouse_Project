@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+<title>Admin Details Form</title>
+</head>
+<body> 
+    <header>
+        <nav class="navbar">
+            <div class="navbar_college" >
+                <img height="70" width="190" src="assets/banasthali_vidyapith_logo.jpeg">
+            </div>
+            <div class="navbar_nav_items">
+                <div class="nav_item_1">
+                    <button class="button__primary_1"><a href="">Home</a></button>
+                    <div class="dropdown">
+                        <button class="button__primary_1">Admin</button>
+                        <div class="dropdown-content">  
+                            <a href="#">Entry Form</a>
+                            <a href="#">Admin Details</a>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                    <button class="button__primary_1">Mess</button>
+                        <div class="dropdown-content">  
+                            <a href="#">Inventory</a>
+                            <a href="#">Menu</a>
+                        </div>
+                    </div>
+                    <button class="button__primary_2"><a href="">Login / Sign-up</a></button>
+                    <button class="button__primary"> About us </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <section class="hero_container">
+            <div class="heroo">
+            <div class="hero_description">
+
+                    Admin Details Form
+            
+            </div>  
+        </section>
+        
+  <form class="form_container" action="/Admin-form/index.html/submit" method="post">
+    <div class="form_int">
+        <h2>
+    <label for="smartId">Smart ID:</label><br>
+    <input type="text" id="smartId" name="smartId" required><br>
+
+    <label for="rollNo">Roll No:</label><br>
+    <input type="number" id="rollNo" name="rollNo" required><br>
+
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required><br>
+
+    <label for="dob">Date of Birth:</label><br>
+    <input type="date" id="dob" name="dob" required><br>
+ 
+    <div class="course_container">
+        <label for="program">Select Program:</label><br>
+        <select id="program" name="program">
+          <option value="btech">BTECH</option>
+          <option value="bsc">BSC</option>
+          <option value="ba">BA</option>
+          <option value="bcom">BCOM</option>
+          <option value="mtech">MTECH</option>
+          <option value="msc">MSC</option>
+          <option value="llb">LLB</option>
+        </select><br>
+    
+    <label for="subject">Subject:(ex. CSE)</label><br>
+    <input type="text" name="subject" id="subject" required><br>
+
+    <label for="year">Year:(ex.2 {for second year})</label><br>
+    <input type="text" id="year" name="year" required><br>
+
+    <label for="fatherName">Father's Name:</label><br>
+    <input type="text" id="fatherName" name="fatherName" required><br>
+
+    <label for="motherName">Mother's Name:</label><br>
+    <input type="text" id="motherName" name="motherName" required><br>
+
+    <label for="email">Email ID:</label><br>
+    <input type="email" id="email" name="email" required><br>
+
+    <label for="phone">Phone Number:</label><br>
+    <input type="tel" id="phone" name="phone" required><br>
+
+    <label for="parentPhone">Parent's Phone Number:</label><br>
+    <input type="tel" id="parentPhone" name="parentPhone" required><br>
+
+    <label for="address">Address:</label><br>
+    <input type="text" id="address" name="address" required><br>
+
+    <label for="city">City:</label><br>
+    <input type="text" id="city" name="city" required><br>
+
+    <label for="state">State:</label><br>
+    <input type="text" id="state" name="state" required><br>
+
+    <label for="pincode">Pincode:</label><br>
+    <input type="text" id="pincode" name="pincode" required><br>
+
+    <button class="button__primary_3" type="submit">Submit</button><br>
+</h2>
+    </div>
+  </form>
+</div>
+</body>
+</html>
