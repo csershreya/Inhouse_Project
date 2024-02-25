@@ -21,3 +21,10 @@ u_type varchar(45)
 username varchar(45) 
 pswd varchar(45)
 
+a few git commands:
+git clone <link of the code>
+git add . - for adding all the changes to your personal system
+git commit -m "created new file" - commits changes to the system 
+git pull 
+git push -u origin main
+
