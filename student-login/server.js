@@ -13,8 +13,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Serve static files (like CSS files)
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
 // MySQL connection
 const connection = mysql.createConnection({
     host: 'localhost',
