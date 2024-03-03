@@ -4,7 +4,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('/warden-login/index.html/submit', {
+        const response = await fetch('/admin-login/index.html/submit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -14,7 +14,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         const data = await response.json();
         if (response.ok) {
             // If login successful, redirect or do something else
-            window.location.href = 'http://127.0.0.1:5500/warden-page/index.html';
+            window.location.href = 'https://www.youtube.com/watch?v=eFO3y_Q7i_Q&list=RDGMEM2j3yRsqu_nuzRLnHd2bMVAVMeFO3y_Q7i_Q&start_radio=1';
         } else {
             // Handle error
             alert(data.message);

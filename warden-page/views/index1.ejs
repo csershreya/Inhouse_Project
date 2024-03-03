@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data from MySQL</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Update Requests</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Detail Type</th>
+                <th>Current Detail</th>
+                <th>New Detail</th>
+                <!-- Add more table headers if needed -->
+            </tr>
+        </thead>
+        <tbody>
+            <% data.forEach(item => { %>
+                <tr>
+                    <td><%= item.detail_id %></td>
+                    <td><%= item.detail_type %></td>
+                    <td><%= item.detail_current %></td>
+                    <td><%= item.detail_new %>  </td>
+                    <!-- Add more table data if needed -->
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>

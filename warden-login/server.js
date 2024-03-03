@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
-const port = 3080;
+const port = 3088;
 
 // Middleware
 app.use(bodyParser.json());
@@ -12,9 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Serve static files (like CSS files)
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-
+ 
 // MySQL connection
 const connection = mysql.createConnection({
     host: 'localhost',

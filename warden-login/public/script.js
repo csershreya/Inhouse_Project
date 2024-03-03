@@ -14,7 +14,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         const data = await response.json();
         if (response.ok) {
             // If login successful, redirect or do something else
-            window.location.href = 'http://127.0.0.1:5500/warden-page/index.html';
+            window.location.href = 'http://localhost:3081/warden';
         } else {
             // Handle error
             alert(data.message);
@@ -24,3 +24,4 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         alert('An error occurred, please try again later.');
     }
 });
+ 
