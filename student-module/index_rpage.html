@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="style_rpage.css"/>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
@@ -64,15 +64,18 @@
               </div>
             <div class="room_container">
             <div class="form">
-            <form class="form_container">
+            <form class="form_container" action="/student-module/index_rpage.html/submit" method="post">
             <h2>
-            <label for="LoginName">Student Name:</label><br>
-            <input type="text" id="loginname" name="loginname" required><br>
-            <label for="Loginid">Student Id:</label><br>
-            <input type="text" id="" name="studentid" required><br>
-            <label for="roomnumber">Room number:</label><br>
-            <input type="number" id="" name="roomnumber" required><br>
-            <button class="button__primary_3" type="submit"><a href="">Submit</a></button><br>
+            <label for="hostel">Hostel Name(ex. gram):</label><br>
+            <input type="text" id="hostel" name="hostel" required><br>
+
+            <label for="student_id">Student Id:</label><br>
+            <input type="text" id="student_id" name="student_id" required><br>
+
+            <label for="room_num">Room number:</label><br>
+            <input type="number" id="room_num" name="room_num" required><br>
+
+            <button class="button__primary_3" type="submit">Submit</button><br>
             </h2>
             </form>
         </div>

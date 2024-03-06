@@ -4,7 +4,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('/student-login/index.html/submit', {
+        const response = await fetch('/student-module/index_login.html/submit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -12,14 +12,15 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             body: JSON.stringify({loginId,password})
         });
         const data = await response.json();
-        if (response.ok) {
+        if (response.ok) { 
             // If login successful, redirect or do something else
-            window.location.href = 'http://localhost:3062';
+            window.location.href = 'http://localhost:3081/page';
         } else {
             // Handle error
             alert(data.message);
         }
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Error:', error);
         alert('An error occurred, please try again later.');
     }

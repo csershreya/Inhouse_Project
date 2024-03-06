@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>available room</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rooms Avaialable</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Room No</th>
+                <th>Floor</th>
+                <th>Vaccancy</th>
+                <!-- Add more table headers if needed -->
+            </tr>
+        </thead>
+        <tbody>
+            <% data.forEach(item => { %>
+                <tr>
+                    <td><%= item.room_no %></td>
+                    <td><%= item.floor_no %></td>
+                    <td><%= item.vaccant %></td>
+                    <!-- <td><%= item.detail_new %>  </td> -->
+                    <!-- Add more table data if needed -->
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>

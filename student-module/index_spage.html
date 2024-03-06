@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="style_spage.css"/>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
@@ -54,15 +54,15 @@
                 confidentiality and used exclusively <br> 
                 for the purpose of room allocation.<br></b>
                 <div class="stu_form">
-                <button class="button__primary"><a href="http://127.0.0.1:5500/studentform/index.html">Student Form</a>  </button>
+                <button class="button__primary"><a href="http://localhost:3082/form">Student Form</a>  </button>
             </div>
         </div>
         <div class="hostel_rooms">
         <div class="rooms">
             <img height="220px" width="400px" src="assets/hostel1.jpg" alt="room1" class="room_1">
             <img height="220px" width="400px" src="assets/hostel2.jpg" alt="room2" class="room_2">   
-            <img height="220px" width="400px"src="assets/hostel3.jpg" alt="room3" class="room_3">
-            <img height="220px" width="400px"src="assets/hostel4.jpg" alt="room4" class="room_4">
+            <img height="220px" width="400px" src="assets/hostel3.jpg" alt="room3" class="room_3">
+            <img height="220px" width="400px" src="assets/hostel4.jpg" alt="room4" class="room_4">
             <img height="220px" width="400px" src="assets/hostel5.jpg" alt="room5" class="room_5">
             <img height="220px" width="400px" src="assets/hostel6.jpg" alt="room6" class="room_6">
             <img height="220px" width="400px" src="assets/hostel7.jpg" alt="room7" class="room_7">
@@ -75,8 +75,8 @@
             it's a space where you'll create memories, study, and unwind.
             Choose wisely, and make it your home away from home.
         </h3>
-        <div class="select_room">
-            <button class="button__primary_2"><a href="">Select your room</a></button>
+        <div class="select_room" id="room">
+            <button class="button__primary_2"><a href="http://localhost:3084/room_form">Select your room</a></button>
             </div> 
     </div>
    
@@ -101,12 +101,12 @@
         <div class="heroooo">
             <img height="700" width="700" src="assets/19199192.jpg" alt="logoooo" class="college_logo2" />
         </div>
-        <form class="form_container">
+        <form class="form_container" action="/student-module/index_spage.html/submit" method="post">
             <div class="form_int">
                 <h2>
             <div class="course_container">
-                <label for="course">Select Detail Type</label><br>
-                <select id="course" name="course">
+                <label for="d_type">Select Detail Type</label><br>
+                <select id="d_type" name="d_type">
                   <option value="none">None</option>
                   <option value="email">Email Id</option>
                   <option value="number">Phone Number</option>
@@ -121,8 +121,8 @@
             <label for="current">Current Detail</label><br>
             <input type="text" id="current" name="current" required><br>
         
-            <label for="new">New Detail</label><br>
-            <input type="text" id="new" name="new" required><br>
+            <label for="d_new">New Detail</label><br>
+            <input type="text" id="d_new" name="d_new" required><br>
         
           
             <button class="button__primary_3" type="submit">Send Request</button><br>
@@ -138,13 +138,16 @@
             <div class="complain_img">
                 <img height="650" width="670" src="assets/complain.jpg"alt="complain" class="college_complain" />
             </div>
+            <form action="/student-module/index_spage.html/send" method="post">
             <div class="complain_write">
                 <div class="watermark">Text Here</div>
             <textarea id="complain" name="complain" rows="35" cols="90" required ></textarea>
             </div>
+            
             <div class="send_button">
-            <button class="button__primary"> Send </button>
-        </div>
+            <button class="button__primary" type="send" id="send"> Send </button>
+            </div>
+            </form>
         </div>
         </div>
         </div>
