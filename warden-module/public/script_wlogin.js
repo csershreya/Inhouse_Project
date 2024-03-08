@@ -4,7 +4,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('/warden-login/index.html/submit', {
+        const response = await fetch('/warden-module/index_wlogin.html/submit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -14,7 +14,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         const data = await response.json();
         if (response.ok) {
             // If login successful, redirect or do something else
-            window.location.href = 'http://localhost:3081/warden';
+            window.location.href = 'http://localhost:3081/wardenp';
         } else {
             // Handle error
             alert(data.message);
