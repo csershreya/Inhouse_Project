@@ -24,20 +24,21 @@
     <table>
         <thead>
             <tr>
-                <th>Student ID</th>
                 <th>Detail Type</th>
                 <th>Current Detail</th>
                 <th>New Detail</th>
+                <th>Student ID</th>
                 <!-- Add more table headers if needed -->
             </tr>
         </thead>
         <tbody>
             <% data.forEach(item => { %>
                 <tr>
-                    <td><%= item.detail_id %></td>
+                    <!-- <td><%= item.det %></td> -->
                     <td><%= item.detail_type %></td>
                     <td><%= item.detail_current %></td>
                     <td><%= item.detail_new %>  </td>
+                    <td><%= item.username %> </td>
                     <!-- Add more table data if needed -->
                 </tr>
             <% }); %>

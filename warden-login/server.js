@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
-const port = 3088;
+const port = 3087;
 
 // Middleware
 app.use(bodyParser.json());
@@ -32,7 +32,7 @@ connection.connect(err => {
 
 // Route to serve HTML form
 
-app.get('/', (req, res) => {
+app.get('/login', (req, res) => {
     console.log('GET request received at /');
     res.sendFile(__dirname + '/index.html');
 });
@@ -68,5 +68,5 @@ app.post('/warden-login/index.html/submit', (req, res) => {
 
 // Start server
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on http://localhost:${port}/login`);
 });
