@@ -39,10 +39,9 @@ CREATE TABLE `course_tbl` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `feedback_tbl` (
-  `f_id` int NOT NULL AUTO_INCREMENT,
   `feedback` varchar(4000) DEFAULT NULL,
-  PRIMARY KEY (`f_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  `username` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `hostel_course_tbl` (
   `h_id` varchar(10) NOT NULL,
@@ -93,12 +92,11 @@ CREATE TABLE `student_master_tbl` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `update_tbl` (
-  `detail_id` int NOT NULL AUTO_INCREMENT,
   `detail_type` varchar(45) NOT NULL,
   `detail_current` varchar(500) NOT NULL,
   `detail_new` varchar(500) NOT NULL,
-  PRIMARY KEY (`detail_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  `username` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `user_master_tbl` (
   `uid` int NOT NULL AUTO_INCREMENT,
