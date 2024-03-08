@@ -9,6 +9,7 @@ const port2 = 3081;
 const port3 = 3082;
 const port4 = 3083;
 const port5 = 3084;
+const port6 = 3085;
 
 //generating random string for the session:
 const crypto = require('crypto');
@@ -35,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'sh@1210520',
+    password: 'Shreya_29',
     database: 'shms'
 });
 
@@ -201,6 +202,22 @@ app.post('/student-module/index_rpage.html/submit', (req, res) => {
         return res.status(200).json({ message: "Room allocated successfully" });
        });
     });
+
+    //--------------------PROFILE-------------------------------------------
+//viewing profile of a student using student_master_tbl
+app.get('/profile', (req, res) => {
+    const userId = req.session.loginId;
+    const sql = 'SELECT st_name,st_id,st_roll,program,sub,email FROM  student_master_tbl where email=?'; 
+    connection.query(sql,[userId],(err, rows) => {
+        if (err) {
+            console.error('Error fetching data:', err);
+            res.status(500).send('Error fetching data');
+        } else {
+            res.render('index_profile', { data: rows });
+        }
+    });
+});
+
 //-------------------------------------------------------------------------
 
 // Start server_login
@@ -226,4 +243,9 @@ app.listen(port4, () => {
 // Start server
 app.listen(port5, () => {
     console.log(`Server is running on http://localhost:${port5}/room_form`);
+});
+
+//Start profile server
+app.listen(port6, () => {
+    console.log(`Server is running on http://localhost:${port6}/profile`);
 });

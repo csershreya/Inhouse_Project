@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>available room</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Profile</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Student Roll No.</th>
+                <th>Program</th>
+                <th>Subject</th>
+                <th>Email</th>
+                <!-- Add more table headers if needed -->
+            </tr>
+        </thead>
+        <tbody>
+            <% data.forEach(item => { %>
+                <tr>
+                    <td><%= item.st_name %></td>
+                    <td><%= item.st_id %></td>
+                    <td><%= item.st-roll %></td>
+                    <td><%= item.program %></td>
+                    <td><%= item.sub %></td>
+                    <td><%= item.email %></td>
+                    <!-- <td><%= item.detail_new %>  </td> -->
+                    <!-- Add more table data if needed -->
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>
