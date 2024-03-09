@@ -10,6 +10,11 @@ const port3 = 3082;
 const port4 = 3083;
 const port5 = 3084;
 const port6 = 3085;
+const port7 = 3086;
+
+//importing nodemailer to send the emails
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 //generating random string for the session:
 const crypto = require('crypto');
@@ -36,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Shreya_29',
+    password: 'sh@1210520',
     database: 'shms'
 });
 
@@ -218,6 +223,67 @@ app.get('/profile', (req, res) => {
     });
 });
 
+//------------------------forgot password mail------------------------
+
+//host and port provided by node mailer to help send emails
+const transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false, // Use `true` for port 465, `false` for all other ports
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+
+// Route to serve HTML form
+app.get('/forgotPassword', (req, res) => {
+console.log('GET request received at /');
+res.sendFile(__dirname + '/index_forgotp.html');
+});
+
+app.post('/student-module/index_forgotp/send', (req, res) => {
+const {emailu} = req.body;
+console.log('Received username:', emailu);
+// console.log('Received password:', password);
+const sql = 'SELECT username,pswd FROM user_master_tbl WHERE username = ?';
+console.log(sql);
+connection.query(sql, [emailu], (err, result) => {
+    if (err) {
+        console.error('Error executing MySQL query:', err);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+})
+    if (result.length === 1) {
+        // Successful entry
+        req.session.loginId = loginId; //stored loginid in session
+       // return res.status(200).json({ message: 'Login successful' });
+        var mailOptions = {
+            from: process.env.EMAIL,
+            to: result[0].username,
+            subject: 'Password by Shree Shanta Hostel Accomodations',
+            html: '<p><b>Your login details for Shree Shanta Hostel Accomodations</b><br><b>Email:</b>' + result[0].username + '<br><b>Password: </b>' + results[0].pswd + '<br><a href="http://localhost:3080/login">Click here to login</a></p>'
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+        return res.status(200).json({ message: "Password sent successfully to your email." });
+
+        
+    } 
+    
+    else {
+        // Incorrect credentials
+        return res.status(401).json({ message: 'Incorrect username or password' });
+    }
+});
+           
+
 //-------------------------------------------------------------------------
 
 // Start server_login
@@ -248,4 +314,9 @@ app.listen(port5, () => {
 //Start profile server
 app.listen(port6, () => {
     console.log(`Server is running on http://localhost:${port6}/profile`);
+});
+
+//Start server
+app.listen(port7, () => {
+    console.log(`Server is running on http://localhost:${port7}/forgotPassword`);
 });
