@@ -5,6 +5,10 @@ For working with the files you need to install these modules:
 npm init -y
 npm install express mysql body-parser
 
+FOR FORGOT PASSWORD FUNCTIONALITY EXECUTE THE FOLLOWING COMMANDS:
+npm install nodemailer
+npm install dotenv
+
 Table: warden_master_tbl
 Columns:
 w_id varchar(10) PK 

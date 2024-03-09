@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>warden_master_tbl</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1> warden_master_tbl</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Warden_id</th>
+                <th>Hostel_id</th>
+                <th>Warden_type</th>
+                <th>Warden_name</th>
+                <th>Warden_email</th>
+                <th>Warden_contact</th>
+                
+                <!-- Add more table headers if needed -->
+            </tr>
+        </thead>
+        
+        <tbody>
+            <% data.forEach(item => { %>
+                <tr>
+                    <td><%= item.w_id %></td>
+                    <td><%= item.h_id %></td>
+                    <td><%= item.w_type %></td>
+                    <td><%= item.w_name %></td>
+                    <td><%= item.w_email %></td>
+                    <td><%= item.w_contact %></td>
+                    
+                    <!-- Add more table data if needed -->
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user_master_tbl</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Table</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>User_id</th>
+                <th>User type</th>
+                <th>Username</th>
+                <th>password</th>
+                
+                <!-- Add more table headers if needed -->
+            </tr>
+        </thead>
+        
+        <tbody>
+            <% data.forEach(item => { %>
+                <tr>
+                    <td><%= item.uid %></td>
+                    <td><%= item.u_type %></td>
+                    <td><%= item.username %></td>
+                    <td><%= item.pswd%></td>
+                    
+                    <!-- Add more table data if needed -->
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>
