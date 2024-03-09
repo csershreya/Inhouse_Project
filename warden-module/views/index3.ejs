@@ -181,7 +181,7 @@
                     <td><%= item.st_id %></td>
                     <td><%= item.st_roll %></td>
                     <td><%= item.st_name %></td>
-                    <td><%= item.dob %></td>
+                    <td><%= new Date(item.dob).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %></td>
                     <td><%= item.program %></td>
                     <td><%= item.sub %></td>
                     <td><%= item.yr %></td>
@@ -198,6 +198,7 @@
                 </tr>
             <% }); %>
         </tbody>
+        
     </table>
 </body>
 </html>
