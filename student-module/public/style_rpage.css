@@ -147,12 +147,14 @@
 }  
 .content_text{
     position: absolute;
-    font-family:Georgia, 'Times New Roman', Times, serif;
-    color: rgb(169, 197, 225) ;
-    -webkit-text-stroke:  rgb(0, 0, 0) 2px;
-    font-size: 39px;
-    margin-top: 240px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black ;
+    -webkit-text-stroke: rgb(169, 197, 225) 1px;
+    text-align: center;
+    font-size: 33px;
+    margin-top: 280px;
     line-height: 1.5;
+    padding: 2%;
     }
 .hero_icons{
     position: relative;
@@ -233,12 +235,14 @@
 .hero_text{
     position: absolute;
     text-align:justify;
-    -webkit-text-stroke: black .8px;
-    color: white;
+    -webkit-text-stroke: white 1px;
+    color:#14083b;
     padding: 35px;
-    font-size: 28px;
+    font-size: 30px;
     margin-top: 20px;
-    font-family:Georgia, 'Times New Roman', Times, serif;
+    margin-left: 3%;
+    width: 90%;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     line-height: 1.5;
     
 }

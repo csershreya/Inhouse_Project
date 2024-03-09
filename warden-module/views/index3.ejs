@@ -1,26 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Data</title>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+        <title>Student Data</title>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="navbar_college" >
+                    <img height="70" width="190" src="./assets/banasthali_vidyapith_logo.jpeg" alt="logo" class="college_logo"/>
+                </div>
+                <div class="navbar_nav_items">
+                    <div class="nav_item_1">
+                        <button class="button__primary_1"><a href="">Home</a></button>
+                        <button class="button__primary"> About us </button>
+                        
+                </div>
+                </div>
+            </nav>
+        </header>
+    
     <style>
-        table {
+    *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    }
+    body {
+    font-family: "playfair",sans-serif;
+    background-color: rgb(169, 197, 225);
+    overflow-x:hidden ;
+    transition:0.5
+    }
+    ul{
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    }
+    a{
+    color: black;
+    text-decoration: none;
+    }
+    a:active{
+    color: rgb(80, 80, 128);
+    }
+
+    button{
+    border:none;
+    cursor: pointer;
+    height: 50px;
+    width: 150px;
+    }
+    section{
+    margin: 4rem;
+    }
+
+    .navbar{
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+    background-color: #f9fafc;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 9999;
+    }
+    .navbar_college {
+    margin-left: 10px;
+    width: 130px;
+    }
+    .button__primary {
+    background-image: linear-gradient(
+    to right,
+      #4330d8 0%,
+      #6e77c3 51%,
+      #4330d8 100%
+    );
+    }
+  .button__primary {
+    margin: 10px;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    text-transform: capitalize;
+    transition: 0.5s;
+    font-weight: 600;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 4px;
+    
+    }
+
+  .button__primary_1 {
+    background-color: #f9fafc;
+    margin: 10px;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    text-transform: capitalize;
+    transition: 0.5s;
+    font-size: medium;
+    font-weight: 600;
+    background-size: 200% auto;
+    color: black;
+    box-shadow: 0 0 20px #f9fafc;
+    border-radius: 4px;
+    
+    }
+  
+  
+  .button__primary:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #e8e8eb;
+    text-decoration: none;
+    }
+    .detail_head{
+        margin-top: 3%;
+        margin-bottom: 3%;
+        margin-left: 40%;
+        font-family:'Times New Roman', Times, serif;
+        font-size: 28px;
+        
+        
+    }
+
+    table {
             border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #ddd;
+            
+            margin-left: 1%;
+            width: 98%;
+    }
+   th, td {
+            border: 1px solid black;
             padding: 8px;
-            text-align: left;
+            text-align: center;
+            background-color:rgb(194, 211, 229);
+            
         }
-        th {
-            background-color: #f2f2f2;
+    th {
+        background-color: #eee;
         }
     </style>
 </head>
 <body>
-    <h1>Update Requests</h1>
+    <div class="detail_head">
+    <h1>Student Details</h1>
+</div>
     <table>
         <thead>
             <tr>
@@ -32,11 +163,13 @@
                 <th>Subject</th>
                 <th>Year</th>
                 <th>Student's Contact</th>
+                <th>E-mail ID</th>
                 <th>Father's Name</th>
                 <th>Mother's Name</th>
                 <th>Parent's Contact</th>
                 <th>Address</th>
                 <th>City</th>
+                <th>State</th>
                 <th>Pincode</th>
                 <!-- Add more table headers if needed -->
             </tr>

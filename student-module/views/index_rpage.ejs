@@ -1,46 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>available room</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Rooms Avaialable</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Room No</th>
-                <th>Floor</th>
-                <th>Vaccancy</th>
-                <!-- Add more table headers if needed -->
-            </tr>
-        </thead>
-        <tbody>
-            <% data.forEach(item => { %>
-                <tr>
-                    <td><%= item.room_no %></td>
-                    <td><%= item.floor_no %></td>
-                    <td><%= item.vaccant %></td>
-                    <!-- <td><%= item.detail_new %>  </td> -->
-                    <!-- Add more table data if needed -->
-                </tr>
-            <% }); %>
-        </tbody>
-    </table>
-</body>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style_rpage.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+        <title>shree shanta hostel management systems</title>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="navbar_college" >
+                    <img height="70" width="190" src="./assets/banasthali_vidyapith_logo.jpeg" alt="logo" class="college_logo"/>
+                </div>
+                <div class="navbar_nav_items">
+                    <div class="nav_item_1">
+                        <button class="button__primary_1"><a href="">My Profile</a></button>
+                        <button class="button__primary_1"><a href="">Home</a></button>
+                        <button class="button__primary"><a href=""> About us</a></button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main class="container">
+            <div class="content">
+                <div class="content_text">
+                  <h3>
+                 As you navigate this new chapter, keep your door open, metaphorically and literally. Be open to new friendships, experiences, and ideas. Your room isn't just a private space;<br>
+                  it's a part of a larger community that is eager to welcome you with open arms.
+                </h3> 
+            </div>
+              </div>
+              <div class="hero_icons">
+               <div class="icon_text"> How Does It Work</div>
+                <div class="icon1_text">
+                    <img height="250px" width="230px" src="assets/icon1.gif" alt="icon1" class="icon_1">
+                    <div class="text1"><h3>First Come First Serve</h3></div>
+                </div>
+                <div class="icon2_text">
+                    <img height="250px" width="230px" src="assets/icon2.gif" alt="icon2" class="icon_1">
+                    <div class="text1"><h3>The Early Birds Catches The Worm</h3></div>
+                </div>
+                <div class="icon3_text">
+                    <img height="250px" width="230px" src="assets/icon4.gif" alt="icon4" class="icon_1">
+                    <div class="text1"><h3>  Rooms In Sharing</h3></div>
+                </div>
+                <div class="icon4_text">
+                    <img height="250px" width="230px" src="assets/icon3.gif" alt="icon3" class="icon_1">
+                    <div class="text1"><h3> Confirm Your Room</h3></div>
+                </div>
+              </div>
+              <div class="hero">
+                <div class="hero_text">
+                <h3><i>
+                To simplify your booking process, we have provided a detailed table showcasing the availability of our rooms.
+                Rooms are allocated on a first-come, first-served basis Explore the table, select the room that suits your preferences,
+                and secure your spot for an amazing year please proceed to fill out the form indicating your chosen dates and room preferences.
+                </i></h3>
+                </div>
+              </div>
+            <div class="room_container">
+            <div class="form">
+            <form class="form_container" action="/student-module/index_rpage.ejs/submit" method="post">
+            <h2>
+            <label for="hostel">Hostel Name(ex. gram):</label><br>
+            <input type="text" id="hostel" name="hostel" required><br>
+
+            <label for="student_id">Student Id:</label><br>
+            <input type="text" id="student_id" name="student_id" required><br>
+
+            <label for="room_num">Room number:</label><br>
+            <input type="number" id="room_num" name="room_num" required><br>
+
+            <button class="button__primary_3" type="submit">Submit</button><br>
+            </h2>
+            </form>
+        </div>
+            </div>
+            <style>
+                table {
+                    border-collapse: collapse;
+                    margin-left: 45%;
+                    margin-top: -30%;
+                    width: 50%;
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 8px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+                avail{
+                    margin-left: 45%;
+                    margin-top: -30%;
+                }
+            </style>
+        </head>
+        <body>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Room No</th>
+                        <th>Floor</th>
+                        <th>Vacancy</th>
+                        <!-- Add more table headers if needed -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.forEach(item => { %>
+                        <tr>
+                            <td><%= item.room_no %></td>
+                            <td><%= item.floor_no %></td>
+                            <td><%= item.vaccant %></td>
+                            <!-- <td><%= item.detail_new %>  </td> -->
+                            <!-- Add more table data if needed -->
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </main>
+    </body>
 </html>
+        
+
+

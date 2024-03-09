@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Shreya_29',
+    password: 'aryakhushi1234',
     database: 'shms'
 });
 
@@ -174,14 +174,14 @@ app.get('/room', (req, res) => {
     });
 });
 
-//room form
-app.get('/room_form', (req, res) => {
-    console.log('GET request received at /room_form');
-    res.sendFile(__dirname + '/index_rpage.html');
-});
+// //room form 
+// app.get('/room_form', (req, res) => {
+//     console.log('GET request received at /room_form');
+//     res.sendFile(__dirname + '/index_rpage.html');
+// });
 
 //allocating rooms
-app.post('/student-module/index_rpage.html/submit', (req, res) => {
+app.post('/student-module/index_rpage.ejs/submit', (req, res) => {
     const { hostel, student_id, room_num } = req.body;
     const room_alloc = `INSERT INTO shms.hostel_room_stu_reln_tbl (h_id, st_id, room_no) VALUES (?, ?, ?)`;
     connection.query(room_alloc, [hostel, student_id, room_num], (err, results) => {
