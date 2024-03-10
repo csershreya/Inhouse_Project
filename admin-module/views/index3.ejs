@@ -152,11 +152,9 @@
     <table>
         <thead>
             <tr>
-                <th>User_id</th>
-                <th>User type</th>
                 <th>Username</th>
-                <th>password</th>
-                
+                <th>User type</th>
+                                
                 <!-- Add more table headers if needed -->
             </tr>
         </thead>
@@ -164,10 +162,10 @@
         <tbody>
             <% data.forEach(item => { %>
                 <tr>
-                    <td><%= item.uid %></td>
-                    <td><%= item.u_type %></td>
+                    
                     <td><%= item.username %></td>
-                    <td><%= item.pswd%></td>
+                    <td><%= item.u_type %></td>
+                    
                     
                     <!-- Add more table data if needed -->
                 </tr>
