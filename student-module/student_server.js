@@ -249,20 +249,22 @@ console.log('Received username:', emailu);
 const sql = 'SELECT username,pswd FROM user_master_tbl WHERE username = ?';
 console.log(sql);
 connection.query(sql, [emailu], (err, result) => {
-    if (err) {
+    if (err) 
+    {
         console.error('Error executing MySQL query:', err);
         return res.status(500).json({ message: 'Internal server error' });
     }
-})
-    if (result.length === 1) {
+
+    if (result.length === 1) 
+    {
         // Successful entry
-        req.session.loginId = loginId; //stored loginid in session
+       // req.session.loginId = loginId; //stored loginid in session
        // return res.status(200).json({ message: 'Login successful' });
         var mailOptions = {
             from: process.env.EMAIL,
             to: result[0].username,
             subject: 'Password by Shree Shanta Hostel Accomodations',
-            html: '<p><b>Your login details for Shree Shanta Hostel Accomodations</b><br><b>Email:</b>' + result[0].username + '<br><b>Password: </b>' + results[0].pswd + '<br><a href="http://localhost:3080/login">Click here to login</a></p>'
+            html: '<p><b>Your login details for Shree Shanta Hostel Accomodations</b><br><b>Email:</b>' + result[0].username + '<br><b>Password: </b>' + result[0].pswd + '<br><a href="http://localhost:3080/login">Click here to login</a></p>'
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
@@ -273,14 +275,15 @@ connection.query(sql, [emailu], (err, result) => {
             }
         });
         return res.status(200).json({ message: "Password sent successfully to your email." });
-
         
     } 
     
-    else {
+    else 
+    {
         // Incorrect credentials
-        return res.status(401).json({ message: 'Incorrect username or password' });
+        return res.status(401).json({ message: 'Incorrect username' });
     }
+});
 });
            
 
