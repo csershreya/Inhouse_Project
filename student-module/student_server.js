@@ -139,12 +139,12 @@ app.post('/student-module/index_spage.html/send', (req, res) => {
 
 // Route to serve HTML form
 app.get('/form', (req, res) => {
-    console.log('GET request received at /');
+    console.log('GET request received at /form');
     res.sendFile(__dirname + '/index_sform.html');
 });
  
 // Route to handle form submission and update data
-app.post('/student-module/index.html/submit', (req, res) => {
+app.post('/student-module/index_sform.html/submit', (req, res) => {
     console.log('POST request received at /student-module/index_sform.html/submit');
     const {smartId, rollNo, name, dob, program, subject, year, fatherName, motherName, email, phone, parentPhone, address, city, state, pincode } = req.body;
     //console.log('ID:', smartId);
