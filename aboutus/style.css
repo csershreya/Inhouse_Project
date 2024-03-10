@@ -1,0 +1,90 @@
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    body {
+        font-family: "playfair",sans-serif;
+        background-color: rgb(169, 197, 225);
+        overflow-x:hidden ;
+        transition:0.5
+    }
+    ul{
+        list-style-type:none;
+        margin:0;
+        padding:0;
+    }
+    a{
+        color: black;
+        text-decoration: none;
+    }
+    a:active{
+        color: rgb(80, 80, 128);
+    }
+
+    button{
+        border:none;
+        cursor: pointer;
+        height: 50px;
+        width: 150px;
+    }
+    section{
+        margin: 4rem;
+    }
+    .navbar{
+        position: sticky;
+        top: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: left;
+        background-color: #f9fafc;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        z-index: 9999;
+        
+    }
+    .navbar_college {
+        margin-left: 10px;
+        width: 130px;
+    }
+    .button__primary {
+        background-image: linear-gradient(
+        to right,
+        #4330d8 0%,
+        #6e77c3 51%,
+        #4330d8 100%
+        );
+    }
+    .button__primary {
+        background-color: #f9fafc;
+        margin: 10px;
+        padding: 0.5rem 1rem;
+        text-align: center;
+        text-transform: capitalize;
+        transition: 0.5s;
+        font-size: medium;
+        font-weight: 600;
+        background-size: 200% auto;
+        color: white;
+        box-shadow: 0 0 20px #f9fafc;
+        border-radius: 4px;
+    }
+    
+    .button__primary:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #e8e8eb;
+        text-decoration: none;
+    }
+    .Heading{
+        position: relative;
+        margin-left: 40%;
+        margin-top: 3%;
+        font-size: 28px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: rgb(0, 38, 73);
+    }
+    .container{
+        margin: 5%;
+        text-align: justify;
+        font-size: 25px;
+    }
