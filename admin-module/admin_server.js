@@ -4,10 +4,10 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
-const port1 = 3050;
-const port2 = 3051;
-const port3 = 3052;
-const port4 = 3053; 
+const port1 = 3040;
+const port2 = 3041;
+const port3 = 3042;
+const port4 = 3043; 
 const port5 = 3054;
 const port6 = 3055;
 

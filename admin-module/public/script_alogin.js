@@ -14,7 +14,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         const data = await response.json();
         if (response.ok) {
             // If login successful, redirect or do something else
-            window.location.href = 'http://localhost:3091/adminp';
+            window.location.href = 'http://localhost:3041/adminp';
         } else {
             // Handle error
             alert(data.message);
