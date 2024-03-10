@@ -154,3 +154,36 @@ section{
       line-height: 50px;
     }
  
+.admin_head{
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin-left: 35%;
+  margin-top: 3%;
+  -webkit-text-stroke:black 1.5px;
+  color: rgb(218, 229, 241);
+  font-size: 50px;
+}
+.admin_functions{
+ background-color: rgb(218, 229, 241);
+ padding: 1.5%;
+ font-size: 30px;
+ margin-left: 5%;
+ margin-right: 5%;
+ margin-top: 2%;
+ line-height: 4;
+}
+
+
+.hostel_details_button{
+  margin-left: 40%;
+  margin-top: -10%;
+}
+.warden_details_button{
+  margin-left: 40%;
+  margin-top: -10%;
+}.user_details_button{
+  margin-left: 40%;
+  margin-top: -10%;
+}.hostel_course_details_button{
+  margin-left: 40%;
+  margin-top: -10%;
+}
