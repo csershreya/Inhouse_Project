@@ -111,7 +111,7 @@ section{
 }
 .requests_pic{
   margin-top: 150px;
-  margin-left: 720px;
+  margin-left: 45%;
   
   }
   .requests_content{
@@ -137,20 +137,23 @@ section{
     padding: 10px;
     border-radius: 8px;
     margin-top: -680px;
-    margin-left: 900px;
+    margin-left: 58%;
     line-height:60px;
+    text-align: justify;
    
     }
     .records{
       margin-top: 200px;
-      margin-left: 720px;
+      margin-left: 45%;
     }
     .records_text{
+      text-align: justify;
       font-family:'Times New Roman', Times, serif;
       font-size: 30px;
       color: #1e2359;
       margin-top: -600px;
       margin-left: 0px;
-      line-height: 50px;
+      line-height: 60px;
+     
     }
  

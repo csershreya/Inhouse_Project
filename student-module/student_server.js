@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'aryakhushi1234',
+    password: 'sh@1210520',
     database: 'shms'
 });
 
@@ -310,9 +310,9 @@ app.listen(port4, () => {
 });
 
 // Start server
-app.listen(port5, () => {
-    console.log(`Server is running on http://localhost:${port5}/room_form`);
-});
+// app.listen(port5, () => {
+//     console.log(`Server is running on http://localhost:${port5}/room_form`);
+// });
 
 //Start profile server
 app.listen(port6, () => {
