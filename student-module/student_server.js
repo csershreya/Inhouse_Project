@@ -11,6 +11,7 @@ const port4 = 3083;
 const port5 = 3084;
 const port6 = 3085;
 const port7 = 3086;
+const port8 = 3088;
 
 //importing nodemailer to send the emails
 const nodemailer = require('nodemailer');
@@ -80,6 +81,7 @@ app.post('/student-module/index_login.html/submit', (req, res) => {
         if (result.length === 1 && result[0].pswd === password) {
             // Successful login
             req.session.loginId = loginId; //stored loginid in session
+            console.log('Login successful. Session loginId:', req.session.loginId);
             return res.status(200).json({ message: 'Login successful' });
             
         } 
@@ -187,27 +189,31 @@ app.get('/room', (req, res) => {
 
 //allocating rooms
 app.post('/student-module/index_rpage.ejs/submit', (req, res) => {
-    const { hostel, student_id, room_num } = req.body;
-    const room_alloc = `INSERT INTO shms.hostel_room_stu_reln_tbl (h_id, st_id, room_no) VALUES (?, ?, ?)`;
-    connection.query(room_alloc, [hostel, student_id, room_num], (err, results) => {
+    const { hostel, room_num } = req.body;
+    const user_id = req.session.loginId;
+    const room_alloc = `INSERT INTO shms.hostel_room_stu_reln_tbl (h_id, s_id, room_no) VALUES (?,?,?)`;
+    connection.query(room_alloc, [hostel, user_id, room_num], (err, results) => {
         if (err) 
         {
+          console.log('login id',user_id);
           console.error('Error allocating room: ' + err);
           return res.status(500).json({ error: 'Internal server error' });
         }
-    });
+    
     // Update vacant seats count
     const update_vacant = `UPDATE room_master_tbl SET vaccant = vaccant-1 WHERE h_id = ? AND room_no = ?`;
     connection.query(update_vacant, [hostel, room_num], (err, results) => {
         if (err) 
         {
+           console.log('login id',user_id);
            console.error('Error updating vacant seats count: ' + err);
            return res.status(500).json({ error: 'Internal server error' });
         }
+        console.log('login id',user_id);
         return res.status(200).json({ message: "Room allocated successfully" });
        });
     });
-
+});
     //--------------------PROFILE-------------------------------------------
 //viewing profile of a student using student_master_tbl
 app.get('/profile', (req, res) => {
@@ -220,6 +226,20 @@ app.get('/profile', (req, res) => {
         } else {
             res.render('index_profile', { data: rows });
         }
+    });
+});
+
+//-----------------------logout--------------------------------------
+
+app.get('/logout', (req, res) => {
+    // Clear session data
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+        // Redirect to login page
+        res.redirect('/index_login.html');
     });
 });
 
@@ -317,6 +337,11 @@ app.listen(port4, () => {
 //Start profile server
 app.listen(port6, () => {
     console.log(`Server is running on http://localhost:${port6}/profile`);
+});
+
+//logout 
+app.listen(port8, () => {
+    console.log(`Server is running on http://localhost:${port8}/logout`);
 });
 
 //Start server
