@@ -1,15 +1,25 @@
 const express = require('express');
+const session = require('express-session');
 const mysql = require('mysql');
 const app = express();
 const port1 = 3050;
 const port2 = 3051;
 const port3 = 3052;
 const port4 = 3087;
+const port5 = 3054;
+const port = 3053;
 
+//generating random string for the session:
+const crypto = require('crypto');
+const generateRandomSecret = () => {
+    return crypto.randomBytes(32).toString('hex'); 
+    // Generate a 32-byte (256-bit) random string
+};
+const secret = generateRandomSecret();
+console.log(secret); // Print the random secret
 const bodyParser = require('body-parser');
 const path = require('path');
 
-const port = 3053;
 
 // Middleware
 app.use(bodyParser.json());
@@ -17,9 +27,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Serve static files (like CSS files)
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-
+app.use(session({
+    secret: secret,
+    resave: false,
+    saveUninitialized: true
+}));
 
 // MySQL connection
 const connection = mysql.createConnection({
@@ -48,6 +60,19 @@ app.get('/wlogin', (req, res) => {
     res.sendFile(__dirname + '/index_wlogin.html');
 });
 
+//-----------------------logout--------------------------------------
+
+app.get('/logout', (req, res) => {
+    // Destroy the session
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+        // Redirect to the login page
+        res.redirect('/wlogin');
+    });
+});
 
 // Route to handle form submission and update data
 app.post('/warden-module/index_wlogin.html/submit', (req, res) => {
@@ -145,3 +170,8 @@ app.listen(port2, () => {
 app.listen(port3, () => {
     console.log(`Server for student_master_tbl is running on http://localhost:${port3}/records`);
 });
+
+app.listen(port5, () => {
+    console.log(`Server for student_master_tbl is running on http://localhost:${port5}/logout`);
+});
+

@@ -28,13 +28,30 @@ console.log(secret); // Print the random secret
 
 
 // Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(session({
     secret: secret,
     resave: false,
     saveUninitialized: true
 }));
+// Middleware to check session state
+const checkSession = (req, res, next) => {
+    // If session exists and user is authenticated (you need to define isAuthenticated function)
+    if (req.session && req.session.isAuthenticated) {
+        return next(); // Proceed to next middleware
+    } else {
+        res.redirect('/login'); // Redirect to login page if session is not valid
+    }
+};
+
+// Apply checkSession middleware to routes that require authentication
+app.get('/protected-page', checkSession, (req, res) => {
+    // Render protected page
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 // Serve static files (like CSS files)
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -181,11 +198,7 @@ app.get('/room', (req, res) => {
     });
 });
 
-// //room form 
-// app.get('/room_form', (req, res) => {
-//     console.log('GET request received at /room_form');
-//     res.sendFile(__dirname + '/index_rpage.html');
-// });
+
 
 //allocating rooms
 app.post('/student-module/index_rpage.ejs/submit', (req, res) => {
@@ -231,15 +244,16 @@ app.get('/profile', (req, res) => {
 
 //-----------------------logout--------------------------------------
 
+
 app.get('/logout', (req, res) => {
-    // Clear session data
+    // Destroy the session
     req.session.destroy(err => {
         if (err) {
             console.error('Error destroying session:', err);
             return res.status(500).json({ message: 'Internal server error' });
         }
-        // Redirect to login page
-        res.redirect('/index_login.html');
+        // Redirect to the login page
+        res.redirect('/login');
     });
 });
 
@@ -280,7 +294,7 @@ connection.query(sql, [emailu], (err, result) => {
         // Successful entry
        // req.session.loginId = loginId; //stored loginid in session
        // return res.status(200).json({ message: 'Login successful' });
-        var mailOptions = {
+        const mailOptions = {
             from: process.env.EMAIL,
             to: result[0].username,
             subject: 'Password by Shree Shanta Hostel Accomodations',
@@ -288,14 +302,14 @@ connection.query(sql, [emailu], (err, result) => {
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-                console.log(error);
-            }
-            else {
-                console.log('Email sent: ' + info.response);
+                console.error('Error sending email:', error);
+                return res.status(500).json({ message: 'Error sending email' });
+            } else {
+                console.log('Email sent:', info.response);
+                return res.status(200).json({ message: "Password sent successfully to your email." });
             }
         });
-        return res.status(200).json({ message: "Password sent successfully to your email." });
-        
+       
     } 
     
     else 
