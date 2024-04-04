@@ -32,6 +32,18 @@ git commit -m "created new file" - commits changes to the system
 git pull 
 git push -u origin main
 
+MAKE A NEW TABLE
+create table room_allocation_requests(
+    -> s_id varchar(45) NOT NULL,
+    -> h_id varchar(10) NOT NULL,
+    -> room_no decimal(10,0) NOT NULL,
+    -> request_id varchar(10) NOT NULL,
+    -> status varchar(20) check(status in('pending','approved','declined'))
+    -> FOREIGN KEY (s_id) REFERENCES user_master_tbl(username),
+    -> FOREIGN KEY (h_id,room_no) REFERENCES room_master_tbl(h_id,room_no),
+    -> CONSTRAINT st_room_pk PRIMARY KEY (s_id,room_no));
+
+
 commands to create all the tables:
 CREATE TABLE `course_tbl` (
   `c_id` varchar(10) NOT NULL,
