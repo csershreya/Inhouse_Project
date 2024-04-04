@@ -148,6 +148,92 @@ app.get('/records', (req, res) => {
     });
 });
 
+//Route to fetch data from room request table
+app.get('/requests', (req, res) => {
+    const sql = `SELECT s_id,request_id,room_no FROM room_allocation_requests where sts='pending'`; 
+    connection.query(sql, (err, rows) => {
+        if (err) {
+            console.error('Error fetching data:', err);
+            res.status(500).send('Error fetching data');
+        } else {
+            res.render('viewreq', { data: rows });
+        }
+    });
+});
+
+
+// Endpoint for the warden to approve or decline room allocation requests
+app.post('/warden-module/views/viewreq.ejs', (req, res) => {
+    const { requestId, approvalStatus } = req.body;
+
+    if (approvalStatus === 'approved') {
+        // Fetch the s_id before updating the request status
+        const getStudentIdQuery = `SELECT s_id, room_no, h_id FROM room_allocation_requests WHERE request_id = ?`;
+        connection.query(getStudentIdQuery, [requestId], (err, results) => {
+            if (err) {
+                console.error('Error fetching student ID:', err);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'Request ID not found' });
+            }
+
+            const { s_id, room_no, h_id } = results[0];
+
+            const updateRequestStatusQuery = `UPDATE room_allocation_requests SET sts = 'approved' WHERE request_id = ?`;
+            connection.query(updateRequestStatusQuery, [requestId], (err, results) => {
+                if (err) {
+                    console.error('Error updating request status:', err);
+                    return res.status(500).json({ error: 'Internal server error' });
+                }
+
+                // Insert the record into hostel_room_stu_reln_tbl
+                const insertRoomAllocationQuery = `INSERT INTO hostel_room_stu_reln_tbl (s_id, room_no, h_id) VALUES (?, ?, ?)`;
+                connection.query(insertRoomAllocationQuery, [s_id, room_no, h_id], (err, results) => {
+                    if (err) {
+                        console.error('Error inserting room allocation:', err);
+                        return res.status(500).json({ error: 'Internal server error' });
+                    }
+
+                    return res.status(200).json({ message: "Room allocated successfully" });
+                });
+                // Update vacant seats count
+                const update_vacant = `UPDATE room_master_tbl SET vaccant = vaccant-1 WHERE h_id = ? AND room_no = ?`;
+                connection.query(update_vacant, [h_id, room_no], (err, results) => {
+                    if (err) 
+                    {
+                    
+                    console.error('Error updating vacant seats count: ' + err);
+                    return res.status(500).json({ error: 'Internal server error' });
+                    }
+                    
+                    return res.status(200).json({ message: "Room allocated successfully" });
+                });
+            });
+        });
+    } else if (approvalStatus === 'declined') {
+        const deleteRequestQuery = `DELETE FROM room_allocation_requests WHERE request_id = ?`;
+        connection.query(deleteRequestQuery, [requestId], (err, results) => {
+            if (err) {
+                console.error('Error deleting request:', err);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+
+            return res.status(200).json({ message: "Room allocation request declined" });
+        });
+    } else {
+        return res.status(400).json({ error: 'Invalid approval status' });
+    }
+});
+
+
+   
+// function generateRequestId() {
+//     // Implement your logic to generate a unique request ID (e.g., using a UUID library)
+//     return 'unique_request_id';
+// }
+
 
 // Start servers
 app.listen(port4, () => {

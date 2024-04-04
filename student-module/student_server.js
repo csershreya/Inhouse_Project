@@ -198,36 +198,31 @@ app.get('/room', (req, res) => {
     });
 });
 
-
-
 //allocating rooms
 app.post('/student-module/index_rpage.ejs/submit', (req, res) => {
     const { hostel, room_num } = req.body;
     const user_id = req.session.loginId;
-    const room_alloc = `INSERT INTO shms.hostel_room_stu_reln_tbl (h_id, s_id, room_no) VALUES (?,?,?)`;
-    connection.query(room_alloc, [hostel, user_id, room_num], (err, results) => {
+    const request_id =  generateRequestId();  //Generate a unique request ID
+    const room_alloc = `INSERT INTO shms.room_allocation_requests (request_id, h_id, s_id, room_no, sts) VALUES (?,?,?,?,'pending')`;
+    connection.query(room_alloc, [request_id, hostel, user_id, room_num], (err, results) => {
         if (err) 
         {
-          console.log('login id',user_id);
+          console.log("login id",user_id);
           console.error('Error allocating room: ' + err);
           return res.status(500).json({ error: 'Internal server error' });
         }
+         
+        return res.status(200).json({ message: "Room allocation request sent successfully"});
     
-    // Update vacant seats count
-    const update_vacant = `UPDATE room_master_tbl SET vaccant = vaccant-1 WHERE h_id = ? AND room_no = ?`;
-    connection.query(update_vacant, [hostel, room_num], (err, results) => {
-        if (err) 
-        {
-           console.log('login id',user_id);
-           console.error('Error updating vacant seats count: ' + err);
-           return res.status(500).json({ error: 'Internal server error' });
-        }
-        console.log('login id',user_id);
-        return res.status(200).json({ message: "Room allocated successfully" });
-       });
     });
 });
-    //--------------------PROFILE-------------------------------------------
+
+function generateRequestId() {
+    // Implement your logic to generate a unique request ID (e.g., using a UUID library)
+    return 'unique_request_id';
+}
+
+//--------------------PROFILE-------------------------------------------
 //viewing profile of a student using student_master_tbl
 app.get('/profile', (req, res) => {
     const userId = req.session.loginId;
