@@ -38,7 +38,7 @@ create table room_allocation_requests(
     -> h_id varchar(10) NOT NULL,
     -> room_no decimal(10,0) NOT NULL,
     -> request_id varchar(10) NOT NULL,
-    -> status varchar(20) check(status in('pending','approved','declined'))
+    -> sts varchar(20) check(sts in('pending','approved','declined'))
     -> FOREIGN KEY (s_id) REFERENCES user_master_tbl(username),
     -> FOREIGN KEY (h_id,room_no) REFERENCES room_master_tbl(h_id,room_no),
     -> CONSTRAINT st_room_pk PRIMARY KEY (s_id,room_no));

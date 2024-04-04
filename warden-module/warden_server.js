@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Shreya_29',
+    password: 'sh@1210520',
     database: 'shms'
 });
  
@@ -127,7 +127,7 @@ app.get('/records', (req, res) => {
 
 //Route to fetch data from room request table
 app.get('/requests', (req, res) => {
-    const sql = `SELECT s_id,room_no FROM room_allocation_requests where status='pending'`; 
+    const sql = `SELECT s_id,request_id,room_no FROM room_allocation_requests where sts='pending'`; 
     connection.query(sql, (err, rows) => {
         if (err) {
             console.error('Error fetching data:', err);
@@ -139,17 +139,13 @@ app.get('/requests', (req, res) => {
 });
 
 
-   // Endpoint for the warden to approve or decline room allocation requests
-app.post('/warden-module/allocation', (req, res) => {
+// Endpoint for the warden to approve or decline room allocation requests
+app.post('/warden-module/views/viewreq.ejs', (req, res) => {
     const { requestId, approvalStatus } = req.body;
 
     if (approvalStatus === 'approved') {
         // Fetch the s_id before updating the request status
-        const getStudentIdQuery = `
-            SELECT s_id, room_no, h_id
-            FROM room_allocation_requests
-            WHERE request_id = ?
-        `;
+        const getStudentIdQuery = `SELECT s_id, room_no, h_id FROM room_allocation_requests WHERE request_id = ?`;
         connection.query(getStudentIdQuery, [requestId], (err, results) => {
             if (err) {
                 console.error('Error fetching student ID:', err);
@@ -162,11 +158,7 @@ app.post('/warden-module/allocation', (req, res) => {
 
             const { s_id, room_no, h_id } = results[0];
 
-            const updateRequestStatusQuery = `
-                UPDATE room_allocation_requests
-                SET status = 'approved'
-                WHERE request_id = ?
-            `;
+            const updateRequestStatusQuery = `UPDATE room_allocation_requests SET sts = 'approved' WHERE request_id = ?`;
             connection.query(updateRequestStatusQuery, [requestId], (err, results) => {
                 if (err) {
                     console.error('Error updating request status:', err);
@@ -174,10 +166,7 @@ app.post('/warden-module/allocation', (req, res) => {
                 }
 
                 // Insert the record into hostel_room_stu_reln_tbl
-                const insertRoomAllocationQuery = `
-                    INSERT INTO hostel_room_stu_reln_tbl (s_id, room_no, h_id)
-                    VALUES (?, ?, ?)
-                `;
+                const insertRoomAllocationQuery = `INSERT INTO hostel_room_stu_reln_tbl (s_id, room_no, h_id) VALUES (?, ?, ?)`;
                 connection.query(insertRoomAllocationQuery, [s_id, room_no, h_id], (err, results) => {
                     if (err) {
                         console.error('Error inserting room allocation:', err);
@@ -186,13 +175,22 @@ app.post('/warden-module/allocation', (req, res) => {
 
                     return res.status(200).json({ message: "Room allocated successfully" });
                 });
+                // Update vacant seats count
+                const update_vacant = `UPDATE room_master_tbl SET vaccant = vaccant-1 WHERE h_id = ? AND room_no = ?`;
+                connection.query(update_vacant, [h_id, room_no], (err, results) => {
+                    if (err) 
+                    {
+                    
+                    console.error('Error updating vacant seats count: ' + err);
+                    return res.status(500).json({ error: 'Internal server error' });
+                    }
+                    
+                    return res.status(200).json({ message: "Room allocated successfully" });
+                });
             });
         });
     } else if (approvalStatus === 'declined') {
-        const deleteRequestQuery = `
-            DELETE FROM room_allocation_requests
-            WHERE request_id = ?
-        `;
+        const deleteRequestQuery = `DELETE FROM room_allocation_requests WHERE request_id = ?`;
         connection.query(deleteRequestQuery, [requestId], (err, results) => {
             if (err) {
                 console.error('Error deleting request:', err);

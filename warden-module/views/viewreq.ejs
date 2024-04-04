@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
@@ -154,19 +154,29 @@
         <thead>
             <tr>
                 <th>Student</th>
+                <th>RequestId</th>
                 <th>Room Number</th>
+                <th>Status</th>
                 <!-- Add more table headers if needed -->
             </tr>
         </thead>
         <tbody>
             <% data.forEach(item => { %>
+                
                 <tr>
                     <td><%= item.s_id %></td>
+                    <td><%= item.request_id %></td>
                     <td><%= item.room_no %></td>
+
                     <td>
                         <!-- Add buttons in the Actions column -->
+                        <!-- <form action="/warden-module/views/viewreq.ejs/approve" method="post"> -->
                         <button class="button__primary" onclick="approveRequest('<%= item.request_id %>')">Approve</button>
+                        <!-- </form> -->
+
+                        <!-- <form action="/warden-module/views/viewreq.ejs/decline" method="post"> -->
                         <button class="button__primary" onclick="declineRequest('<%= item.request_id %>')">Decline</button>
+                        <!-- </form> -->
                         <!-- Add more buttons or customize as needed -->
                     </td>
                     <!-- Add more table data if needed -->
@@ -177,36 +187,24 @@
 
     <script>
         function approveRequest(requestId) {
-            fetch('/warden-module/approve-room-allocation', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    requestId: requestId,
-                    approvalStatus: 'approved'
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Handle response as needed
-                // Refresh the page or update UI as needed
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle error as needed
-            });
+            console.log(requestId);
+            sendApprovalRequest(requestId, 'approved');
         }
 
         function declineRequest(requestId) {
-            fetch('/warden-module/approve-room-allocation', {
+            sendApprovalRequest(requestId, 'declined');
+        }
+
+        function sendApprovalRequest(requestId, approvalStatus) {
+            
+            fetch('/warden-module/views/viewreq.ejs', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     requestId: requestId,
-                    approvalStatus: 'declined'
+                    approvalStatus: approvalStatus
                 })
             })
             .then(response => response.json())
