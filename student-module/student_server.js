@@ -280,7 +280,7 @@ connection.query(sql, [emailu], (err, result) => {
         // Successful entry
        // req.session.loginId = loginId; //stored loginid in session
        // return res.status(200).json({ message: 'Login successful' });
-        var mailOptions = {
+        const mailOptions = {
             from: process.env.EMAIL,
             to: result[0].username,
             subject: 'Password by Shree Shanta Hostel Accomodations',
@@ -288,14 +288,14 @@ connection.query(sql, [emailu], (err, result) => {
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-                console.log(error);
-            }
-            else {
-                console.log('Email sent: ' + info.response);
+                console.error('Error sending email:', error);
+                return res.status(500).json({ message: 'Error sending email' });
+            } else {
+                console.log('Email sent:', info.response);
+                return res.status(200).json({ message: "Password sent successfully to your email." });
             }
         });
-        return res.status(200).json({ message: "Password sent successfully to your email." });
-        
+       
     } 
     
     else 
