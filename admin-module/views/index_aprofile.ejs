@@ -156,30 +156,45 @@
         
         <thead>
             <tr>
-                <th>Student Name</th>
-                <th>Student ID</th>
-                <th>Student Roll No.</th>
-                <th>Program</th>
-                <th>Subject</th>
-                <th>Email</th>
+                <th>Admin ID</th>
+                <th>Admin Name</th>
+                <th>Password</th>
                 <!-- Add more table headers if needed -->
             </tr>
         </thead>
         <tbody>
             <% data.forEach(item => { %>
                 <tr>
-                    <td contenteditable="true"><%= item.st_name %></td>
-                    <td contenteditable="true"><%= item.st_id %></td>
-                    <td contenteditable="true"><%= item.st_roll %></td>
-                    <td contenteditable="true"><%= item.program %></td>
-                    <td contenteditable="true"><%= item.sub %></td>
-                    <td contenteditable="true"><%= item.email %></td>
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>
                     <!-- <td><%= item.detail_new %>  </td> -->
                     <!-- Add more table data if needed -->
                 </tr>
             <% }); %>
         </tbody>
     </table>
+    <script>
+        function saveTable() {
+            var tableData = [];
+            var rows = document.getElementById("editableTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+        
+            for (var i = 0; i < rows.length; i++) {
+                var rowData = [];
+                var cells = rows[i].getElementsByTagName("td");
+                for (var j = 0; j < cells.length; j++) {
+                    rowData.push(cells[j].innerText);
+                }
+                tableData.push(rowData);
+            }
+        
+            // Here, you can send the tableData to the server or save it locally
+            console.log(tableData);
+            // For example, you can use localStorage to save the data locally
+            localStorage.setItem("editableTableData", JSON.stringify(tableData));
+            alert("Table data saved successfully!");
+        }
+        </script>
     <div class="logout">
     <button class="button__primary"><a href="">Change password</a></button>
     <button class="button__primary"><a href="">Logout</a></button>
