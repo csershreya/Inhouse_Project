@@ -8,7 +8,7 @@ const port3 = 3052;
 const port4 = 3087;
 const port5 = 3054;
 const port = 3053;
-
+const port6 = 3055;
 //generating random string for the session:
 const crypto = require('crypto');
 const generateRandomSecret = () => {
@@ -37,7 +37,7 @@ app.use(session({
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'aryakhushi1234',
+    password: 'sh@1210520',
     database: 'shms'
 });
  
@@ -260,3 +260,6 @@ app.listen(port5, () => {
     console.log(`Server for student_master_tbl is running on http://localhost:${port5}/logout`);
 });
 
+app.listen(port6, () => {
+    console.log(`Server for student_master_tbl is running on http://localhost:${port6}/requests`);
+});
