@@ -157,6 +157,7 @@
                 <th>Detail Type</th>
                 <th>Current Detail</th>
                 <th>New Detail</th>
+                <th>Request ID</th>
                 <th>Actions</th>
                 <!-- Add more table headers if needed -->
             </tr>
@@ -164,20 +165,61 @@
         <tbody>
             <% data.forEach(item => { %>
                 <tr>
-                    <td><%= item.username %></td>
-                    <td><%= item.detail_type %></td>
-                    <td><%= item.detail_current %></td>
-                    <td><%= item.detail_new %> </td>
+                    <td><%= item.s_id %></td>
+                    <td><%= item.d_type %></td>
+                    <td><%= item.d_current %></td>
+                    <td><%= item.d_new %> </td>
+                    <td><%= item.request_id %></td>
                     <td>
                         <!-- Add buttons in the Actions column -->
-                        <button class="button__primary" onclick="editDetail('<%= item.detail_id %>')">Accept</button>
-                        <button class="button__primary" onclick="deleteDetail('<%= item.detail_id %>')">Delete</button>
-                        <!-- Add more buttons or customize as needed -->
+                        <!-- <form action="/warden-module/views/viewreq.ejs/approve" method="post"> -->
+                            <button class="button__primary" onclick="approveRequest('<%= item.request_id %>')">Approve</button>
+                            <!-- </form> -->
+    
+                            <!-- <form action="/warden-module/views/viewreq.ejs/decline" method="post"> -->
+                            <button class="button__primary" onclick="declineRequest('<%= item.request_id %>')">Decline</button>
+                            <!-- </form> -->
+                            <!-- Add more buttons or customize as needed -->
                     </td>
                     <!-- Add more table data if needed -->
                 </tr>
             <% }); %>
         </tbody>
     </table>
+
+    <script>
+        function approveRequest(requestId) {
+            console.log(requestId);
+            sendApprovalRequest(requestId, 'approved');
+        }
+
+        function declineRequest(requestId) {
+            sendApprovalRequest(requestId, 'declined');
+        }
+
+        function sendApprovalRequest(requestId, approvalStatus) {
+            
+            fetch('/warden-module/views/index1.ejs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    requestId: requestId,
+                    approvalStatus: approvalStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Handle response as needed
+                // Refresh the page or update UI as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error as needed
+            });
+        }
+    </script>
+
 </body>
 </html>

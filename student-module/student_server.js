@@ -26,6 +26,8 @@ const generateRandomSecret = () => {
 const secret = generateRandomSecret();
 console.log(secret); // Print the random secret
 
+ //importing library uuid for unique id generation
+const { v4: uuidv4 } = require('uuid');
 
 // Middleware
 
@@ -59,7 +61,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'sh@1210520',
+    password: 'Shreya_29',
     database: 'shms'
 });
 
@@ -117,23 +119,24 @@ app.get('/page', (req, res) => {
     console.log('GET request received at /');
     res.sendFile(__dirname + '/index_spage.html');
 });
-
 // Route to handle form submission and update data
 app.post('/student-module/index_spage.html/submit', (req, res) => {
     console.log('POST request received at /student-pagee/index_spage.html/submit');
-    const {d_type,current,d_new} = req.body;
+    const { d_type, current, d_new } = req.body;
     const userId = req.session.loginId;
-    const sql = `INSERT INTO shms.update_tbl (username,detail_type,detail_current,detail_new) VALUES (?,?,?,?)`;
-    connection.query(sql, [userId,d_type,current,d_new], (err, result) => {
+    const request_id =  generateRequestId();  //Generate a unique request ID
+    const sql = `INSERT INTO shms.update_requests_tbl (request_id,s_id, d_type, d_current, d_new) VALUES (?, ?, ?, ?,?)`;
+    connection.query(sql, [request_id,userId, d_type, current, d_new], (err, result) => {
         if (err) {
-            console.error('Error updating data:', err);
-            res.status(500).send('Error updating data');
+            console.error('Error submitting update request:', err);
+            res.status(500).send('Error submitting update request');
         } else {
-            console.log('Update request made');
-            res.send('Update request made');
+            console.log('Update request submitted');
+            res.send('Update request submitted');
         }
     });
 });
+
 
 //route to handle feedbacks and complaints
 app.post('/student-module/index_spage.html/send', (req, res) => {
@@ -165,11 +168,14 @@ app.get('/form', (req, res) => {
 // Route to handle form submission and update data
 app.post('/student-module/index_sform.html/submit', (req, res) => {
     console.log('POST request received at /student-module/index_sform.html/submit');
-    const {smartId, rollNo, name, dob, program, subject, year, fatherName, motherName, email, phone, parentPhone, address, city, state, pincode } = req.body;
+    const {smartId, rollNo, name, dob, program, subject, year, fatherName, motherName, email, phone, parentPhone, 
+        address, city, state, pincode } = req.body;
     //console.log('ID:', smartId);
     //console.log('Name:', name);
-    const sql = `INSERT INTO shms.student_master_tbl (st_id,st_roll,st_name,dob,program,sub,yr,st_phno,email,f_name,m_name,f_phno,address,city,state,pincode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
-    connection.query(sql, [smartId, rollNo, name, dob, program, subject, year, phone, email, fatherName, motherName, parentPhone, address, city, state, pincode], (err, result) => {
+    const sql = `INSERT INTO shms.student_master_tbl (st_id,st_roll,st_name,dob,program,sub,yr,st_phno,email,f_name,m_name,
+        f_phno,address,city,state,pincode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    connection.query(sql, [smartId, rollNo, name, dob, program, subject, year, phone, email, fatherName, motherName, parentPhone, 
+        address, city, state, pincode], (err, result) => {
         if (err) {
             console.error('Error inserting data:', err);
             res.status(500).send('Error inserting data');
@@ -218,8 +224,8 @@ app.post('/student-module/index_rpage.ejs/submit', (req, res) => {
 });
 
 function generateRequestId() {
-    // Implement your logic to generate a unique request ID (e.g., using a UUID library)
-    return 'unique_request_id';
+    // Generate a unique UUID (version 4) as the request ID
+    return uuidv4();
 }
 
 //--------------------PROFILE-------------------------------------------
@@ -293,7 +299,8 @@ connection.query(sql, [emailu], (err, result) => {
             from: process.env.EMAIL,
             to: result[0].username,
             subject: 'Password by Shree Shanta Hostel Accomodations',
-            html: '<p><b>Your login details for Shree Shanta Hostel Accomodations</b><br><b>Email:</b>' + result[0].username + '<br><b>Password: </b>' + result[0].pswd + '<br><a href="http://localhost:3080/login">Click here to login</a></p>'
+            html: '<p><b>Your login details for Shree Shanta Hostel Accomodations</b><br><b>Email:</b>' 
+            + result[0].username + '<br><b>Password: </b>' + result[0].pswd + '<br><a href="http://localhost:3080/login">Click here to login</a></p>'
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {

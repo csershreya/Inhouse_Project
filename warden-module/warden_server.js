@@ -8,6 +8,7 @@ const port3 = 3052;
 const port4 = 3087;
 const port5 = 3054;
 const port = 3053;
+const port6= 3055;
 
 //generating random string for the session:
 const crypto = require('crypto');
@@ -37,7 +38,7 @@ app.use(session({
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'sh@1210520',
+    password: 'Shreya_29',
     database: 'shms'
 });
  
@@ -110,7 +111,7 @@ app.get('/wardenp', (req, res) => {
 // Route for data from update_tbl
 
 app.get('/update', (req, res) => {
-    const sql = 'SELECT * FROM update_tbl';
+    const sql = 'SELECT * FROM update_requests_tbl';
     connection.query(sql, (err, rows) => {
         if (err) {
             console.error('Error fetching data from update_tbl:', err);
@@ -120,6 +121,93 @@ app.get('/update', (req, res) => {
         }
     });
 });
+
+
+// Route to handle warden's approval of update requests
+app.post('/warden-module/view/index1.ejs', (req, res) => {
+    const { requestId, approvalStatus } = req.body;
+
+    if (approvalStatus === 'approved' || approvalStatus === 'declined') {
+        const updateRequestStatusQuery = `UPDATE update_requests_tbl SET status = ? WHERE request_id = ?`;
+        connection.query(updateRequestStatusQuery, [approvalStatus, requestId], (err, results) => {
+            if (err) {
+                console.error('Error updating request status:', err);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+
+            if (approvalStatus === 'approved') {
+                // Fetch the update details and update the student database
+                const fetchUpdateDetailsQuery = `
+                    SELECT s_id, d_type, d_current, d_new FROM update_requests_tbl WHERE request_id = ?`;
+                connection.query(fetchUpdateDetailsQuery, [requestId], (err, results) => {
+                    if (err) {
+                        console.error('Error fetching update details:', err);
+                        return res.status(500).json({ error: 'Internal server error' });
+                    }
+
+                    const { s_id, d_type, d_current, d_new } = results[0];
+                    let updateAttributeQuery;
+                    switch (d_type) {
+                        case 'email':
+                            updateAttributeQuery = `
+                                UPDATE student_master_tbl SET email = ? WHERE st_id = ? AND email= ?`;
+                            break;
+                        case 'number':
+                            updateAttributeQuery = `
+                                UPDATE student_master_tbl SET st_phno = ? WHERE st_id = ? AND st_phno = ?`;
+                            break;
+                        case "parents":
+                            updateAttributeQuery = `
+                                UPDATE student_master_tbl SET f_phno = ? WHERE st_id = ? AND f_phno = ?`;
+                            break;
+                        case 'address':
+                            updateAttributeQuery = `
+                                UPDATE student_master_tbl SET address = ? WHERE st_id = ? AND address = ?`;
+                            break;
+                        case 'city':
+                            updateAttributeQuery = `
+                                UPDATE student_master_tbl SET city = ? WHERE st_id = ? AND city = ?`;
+                            break;
+                        case 'pincode':
+                            updateAttributeQuery = `
+                                UPDATE student_master_tbl SET pincode = ? WHERE st_id = ? AND pincode = ?`;
+                            break;
+                        case 'state':
+                            updateAttributeQuery = `
+                                UPDATE student_master_tbl SET state = ? WHERE st_id = ? AND state = ?`;
+                            break;
+                        default:
+                            return res.status(400).json({ error: 'Invalid detail type' });
+                    }
+
+                    connection.query(updateAttributeQuery, [d_new, s_id, d_current], (err, results) => {
+                        if (err) {
+                            console.error('Error updating attribute:', err);
+                            return res.status(500).json({ error: 'Internal server error' });
+                        }
+
+                        return res.status(200).json({ message: "Attribute updated successfully" });
+                    });
+                });
+            } else {
+                return res.status(200).json({ message: "Update request declined" });
+            }
+        });
+    } else if (approvalStatus === 'declined') {
+        const deleteRequestQuery = `DELETE FROM update_requests_tbl WHERE request_id = ?`;
+        connection.query(deleteRequestQuery, [requestId], (err, results) => {
+            if (err) {
+                console.error('Error deleting request:', err);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+
+            return res.status(200).json({ message: "Update request request declined" });
+        });
+    }else {
+        return res.status(400).json({ error: 'Invalid approval status' });
+    }
+});
+
 
 // Route for data from feedback_tbl
 app.get('/feedback', (req, res) => {
@@ -181,8 +269,8 @@ app.post('/warden-module/views/viewreq.ejs', (req, res) => {
 
             const { s_id, room_no, h_id } = results[0];
 
-            const updateRequestStatusQuery = `UPDATE room_allocation_requests SET sts = 'approved' WHERE request_id = ?`;
-            connection.query(updateRequestStatusQuery, [requestId], (err, results) => {
+            const updateRequestStatusQuery = `UPDATE room_allocation_requests SET sts = 'approved' WHERE request_id = ? `;
+            connection.query(updateRequestStatusQuery, [requestId, room_no, h_id], (err, results) => {
                 if (err) {
                     console.error('Error updating request status:', err);
                     return res.status(500).json({ error: 'Internal server error' });
@@ -258,6 +346,10 @@ app.listen(port3, () => {
 });
 
 app.listen(port5, () => {
-    console.log(`Server for student_master_tbl is running on http://localhost:${port5}/logout`);
+    console.log(`Server for logout is running on http://localhost:${port5}/logout`);
+});
+
+app.listen(port6, () => {
+    console.log(`Server for logout is running on http://localhost:${port6}/requests`);
 });
 

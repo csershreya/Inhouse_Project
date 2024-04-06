@@ -8,6 +8,7 @@ npm install express mysql body-parser
 FOR FORGOT PASSWORD FUNCTIONALITY EXECUTE THE FOLLOWING COMMANDS:
 npm install nodemailer
 npm install dotenv
+npm install uuid
 
 Table: warden_master_tbl
 Columns:
