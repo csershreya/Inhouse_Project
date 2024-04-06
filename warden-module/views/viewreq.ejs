@@ -4,11 +4,11 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
-        <title>hostel_master_tbl</title>
+        <title>Data from MySQL</title>
     </head>
     <body>
         <header>
@@ -18,8 +18,8 @@
                 </div>
                 <div class="navbar_nav_items">
                     <div class="nav_item_1">
-                        <button class="button__primary_1"><a href="http://localhost:3095/home">Home</a></button>
-                        <button class="button__primary"><a href="http://localhost:3090/aboutus"> About us </a> </button>
+                        <button class="button__primary_1"><a href="">Home</a></button>
+                        <button class="button__primary"> About us </button>
                         
                 </div>
                 </div>
@@ -120,7 +120,7 @@
     color: #e8e8eb;
     text-decoration: none;
     }
-    .table1{
+    .update_head{
         margin-top: 3%;
         margin-bottom: 3%;
         margin-left: 40%;
@@ -145,35 +145,70 @@
         }
     </style>
 </head>
-    
 <body>
-    <div class="table1">
-    <h1>Hostel Table</h1>
-</div>
+    <div class="update_head">
+        <h1>Room Allocation Requests</h1>
+    </div>
+    
     <table>
         <thead>
             <tr>
-                <th>Hostel_id</th>
-                <th>Hostel Name</th>
-                <th>No. of floors</th>
-                <th>No. of rooms</th>
-                
-                <!-- Add more table headers if needed -->
+                <th>Student</th>
+                <th>RequestId</th>
+                <th>Room Number</th>
+                <th>Status</th>
+                <!-- More table headers can be added if needed -->
             </tr>
         </thead>
-        
         <tbody>
             <% data.forEach(item => { %>
                 <tr>
-                    <td><%= item.h_id %></td>
-                    <td><%= item.h_name %></td>
-                    <td><%= item.no_floors %></td>
-                    <td><%= item.no_rooms %></td>
-                    
+                    <td><%= item.s_id %></td>
+                    <td><%= item.request_id %></td>
+                    <td><%= item.room_no %></td>
+                    <td>
+                        <button class="button__primary" onclick="approveRequest('<%= item.request_id %>')">Approve</button>
+                        <button class="button__primary" onclick="declineRequest('<%= item.request_id %>')">Decline</button>
+                    </td>
                     <!-- Add more table data if needed -->
                 </tr>
             <% }); %>
         </tbody>
     </table>
+
+    <script>
+        function approveRequest(requestId) {
+            console.log(requestId);
+            sendApprovalRequest(requestId, 'approved');
+        }
+
+        function declineRequest(requestId) {
+            sendApprovalRequest(requestId, 'declined');
+        }
+
+        function sendApprovalRequest(requestId, approvalStatus) {
+            
+            fetch('/warden-module/views/viewreq.ejs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    requestId: requestId,
+                    approvalStatus: approvalStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Handle response as needed
+                // Refresh the page or update UI as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error as needed
+            });
+        }
+    </script>
+
 </body>
 </html>

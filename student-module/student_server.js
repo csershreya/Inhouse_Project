@@ -28,13 +28,30 @@ console.log(secret); // Print the random secret
 
 
 // Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(session({
     secret: secret,
     resave: false,
     saveUninitialized: true
 }));
+// Middleware to check session state
+const checkSession = (req, res, next) => {
+    // If session exists and user is authenticated (you need to define isAuthenticated function)
+    if (req.session && req.session.isAuthenticated) {
+        return next(); // Proceed to next middleware
+    } else {
+        res.redirect('/login'); // Redirect to login page if session is not valid
+    }
+};
+
+// Apply checkSession middleware to routes that require authentication
+app.get('/protected-page', checkSession, (req, res) => {
+    // Render protected page
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 // Serve static files (like CSS files)
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -56,20 +73,16 @@ connection.connect(err => {
 });
 
 //---------------login server-------------------
-
-// Route to serve HTML form
 app.get('/login', (req, res) => {
     console.log('GET request received at /');
     res.sendFile(__dirname + '/index_login.html');
 });
 
-
-// Route to handle form submission and update data
+// Route to handle Student login
 app.post('/student-module/index_login.html/submit', (req, res) => {
     console.log('POST request received at /student-login/index_login.html/submit');
     const {loginId, password } = req.body;
-    console.log('Received loginId:', loginId);
-    console.log('Received password:', password);
+    console.log('Received loginId:', loginId); console.log('Received password:', password);
     const sql = 'SELECT username,pswd FROM user_master_tbl WHERE username = ? and u_type="student"';
     console.log(sql);
     connection.query(sql, [loginId], (err, result) => {
@@ -77,7 +90,6 @@ app.post('/student-module/index_login.html/submit', (req, res) => {
             console.error('Error executing MySQL query:', err);
             return res.status(500).json({ message: 'Internal server error' });
         }
-
         if (result.length === 1 && result[0].pswd === password) {
             // Successful login
             req.session.loginId = loginId; //stored loginid in session
@@ -85,7 +97,6 @@ app.post('/student-module/index_login.html/submit', (req, res) => {
             return res.status(200).json({ message: 'Login successful' });
             
         } 
-        
         else {
             // Incorrect credentials
             return res.status(401).json({ message: 'Incorrect username or password' });
@@ -94,8 +105,6 @@ app.post('/student-module/index_login.html/submit', (req, res) => {
 });
 
 //-----------student page server----------
-
-// Route to serve HTML form
 app.get('/page', (req, res) => {
     console.log('GET request received at /');
     res.sendFile(__dirname + '/index_spage.html');
@@ -181,40 +190,31 @@ app.get('/room', (req, res) => {
     });
 });
 
-// //room form 
-// app.get('/room_form', (req, res) => {
-//     console.log('GET request received at /room_form');
-//     res.sendFile(__dirname + '/index_rpage.html');
-// });
-
 //allocating rooms
 app.post('/student-module/index_rpage.ejs/submit', (req, res) => {
     const { hostel, room_num } = req.body;
     const user_id = req.session.loginId;
-    const room_alloc = `INSERT INTO shms.hostel_room_stu_reln_tbl (h_id, s_id, room_no) VALUES (?,?,?)`;
-    connection.query(room_alloc, [hostel, user_id, room_num], (err, results) => {
+    const request_id =  generateRequestId();  //Generate a unique request ID
+    const room_alloc = `INSERT INTO shms.room_allocation_requests (request_id, h_id, s_id, room_no, sts) VALUES (?,?,?,?,'pending')`;
+    connection.query(room_alloc, [request_id, hostel, user_id, room_num], (err, results) => {
         if (err) 
         {
-          console.log('login id',user_id);
+          console.log("login id",user_id);
           console.error('Error allocating room: ' + err);
           return res.status(500).json({ error: 'Internal server error' });
         }
+         
+        return res.status(200).json({ message: "Room allocation request sent successfully"});
     
-    // Update vacant seats count
-    const update_vacant = `UPDATE room_master_tbl SET vaccant = vaccant-1 WHERE h_id = ? AND room_no = ?`;
-    connection.query(update_vacant, [hostel, room_num], (err, results) => {
-        if (err) 
-        {
-           console.log('login id',user_id);
-           console.error('Error updating vacant seats count: ' + err);
-           return res.status(500).json({ error: 'Internal server error' });
-        }
-        console.log('login id',user_id);
-        return res.status(200).json({ message: "Room allocated successfully" });
-       });
     });
 });
-    //--------------------PROFILE-------------------------------------------
+
+function generateRequestId() {
+    // Implement your logic to generate a unique request ID (e.g., using a UUID library)
+    return 'unique_request_id';
+}
+
+//--------------------PROFILE-------------------------------------------
 //viewing profile of a student using student_master_tbl
 app.get('/profile', (req, res) => {
     const userId = req.session.loginId;
@@ -231,15 +231,16 @@ app.get('/profile', (req, res) => {
 
 //-----------------------logout--------------------------------------
 
+
 app.get('/logout', (req, res) => {
-    // Clear session data
+    // Destroy the session
     req.session.destroy(err => {
         if (err) {
             console.error('Error destroying session:', err);
             return res.status(500).json({ message: 'Internal server error' });
         }
-        // Redirect to login page
-        res.redirect('/index_login.html');
+        // Redirect to the login page
+        res.redirect('/login');
     });
 });
 
@@ -280,7 +281,7 @@ connection.query(sql, [emailu], (err, result) => {
         // Successful entry
        // req.session.loginId = loginId; //stored loginid in session
        // return res.status(200).json({ message: 'Login successful' });
-        var mailOptions = {
+        const mailOptions = {
             from: process.env.EMAIL,
             to: result[0].username,
             subject: 'Password by Shree Shanta Hostel Accomodations',
@@ -288,14 +289,14 @@ connection.query(sql, [emailu], (err, result) => {
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-                console.log(error);
-            }
-            else {
-                console.log('Email sent: ' + info.response);
+                console.error('Error sending email:', error);
+                return res.status(500).json({ message: 'Error sending email' });
+            } else {
+                console.log('Email sent:', info.response);
+                return res.status(200).json({ message: "Password sent successfully to your email." });
             }
         });
-        return res.status(200).json({ message: "Password sent successfully to your email." });
-        
+       
     } 
     
     else 

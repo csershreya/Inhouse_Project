@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -8,8 +9,25 @@ const port1 = 3040;
 const port2 = 3041;
 const port3 = 3042;
 const port4 = 3043; 
-const port5 = 3054;
-const port6 = 3055;
+const port5 = 3044;
+const port6 = 3070;
+const port7 = 3036;
+
+//generating random string for the session:
+const crypto = require('crypto');
+const generateRandomSecret = () => {
+    return crypto.randomBytes(32).toString('hex'); 
+    // Generate a 32-byte (256-bit) random string
+};
+const secret = generateRandomSecret();
+console.log(secret); // Print the random secret
+
+//session
+app.use(session({
+    secret: secret,
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Middleware
 app.use(bodyParser.json());
@@ -24,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'aryakhushi1234',
+    password: 'sh@1210520', //sh@1210520
     database: 'shms'
 });
 
@@ -41,15 +59,29 @@ connection.connect(err => {
 app.set('view engine', 'ejs');
 
 
-// Route to serve HTML form
 
+
+//-----------------------logout--------------------------------------
+
+app.get('/logout', (req, res) => {
+    // Destroy the session
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+        // Redirect to the login page
+        res.redirect('/alogin');
+    });
+});
+
+
+//------------------------login server-----------------------------------
 app.get('/alogin', (req, res) => {
     console.log('GET request received at /');
     res.sendFile(__dirname + '/index_alogin.html');
 });
-
-
-// Route to handle form submission and update data
+// Route to handle Admin Login
 app.post('/admin-module/index_alogin.html/submit', (req, res) => {
     console.log('POST request received at /admin-module/index_alogin.html/submit');
     const {loginId, password } = req.body;
@@ -75,7 +107,6 @@ app.post('/admin-module/index_alogin.html/submit', (req, res) => {
         }
     });
 });
-
 // route for admin page 
 app.get('/adminp', (req, res) => {
     console.log('GET request received at /');
@@ -165,4 +196,9 @@ app.listen(port5, () => {
 // Start server
 app.listen(port6, () => {
     console.log(`Server is running on http://localhost:${port6}/course_tbl`);
+});
+
+// Start server
+app.listen(port7, () => {
+    console.log(`Server is running on http://localhost:${port7}/logout`);
 });
