@@ -33,6 +33,20 @@ git commit -m "created new file" - commits changes to the system
 git pull 
 git push -u origin main
 
+
+CREATE TABLE `update_requests_tbl` (
+  `request_id` varchar(100) NOT NULL,
+  `s_id` varchar(45) DEFAULT NULL,
+  `d_type` varchar(45) NOT NULL,
+  `d_current` varchar(45) NOT NULL,
+  `sts` varchar(20) DEFAULT NULL,
+  `d_new` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`request_id`),
+  KEY `s_id` (`s_id`),
+  CONSTRAINT `update_requests_tbl_ibfk_1` FOREIGN KEY (`s_id`) REFERENCES `user_master_tbl` (`username`),
+  CONSTRAINT `update_requests_tbl_chk_1` CHECK ((`sts` in (_utf8mb4'pending',_utf8mb4'approved',_utf8mb4'declined')))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
 MAKE A NEW TABLE
 create table room_allocation_requests(
     -> s_id varchar(45) NOT NULL,
