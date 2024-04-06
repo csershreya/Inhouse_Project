@@ -156,4 +156,17 @@ section{
       line-height: 60px;
      
     }
- 
+ .room_details{
+  margin-top: 10%;
+ }
+ .room_Details_info{
+  font-family:'Times New Roman', Times, serif;
+  font-size: 30px;
+  color: #1e2359;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: -680px;
+  margin-left: 58%;
+  line-height:60px;
+  text-align: justify;
+ }

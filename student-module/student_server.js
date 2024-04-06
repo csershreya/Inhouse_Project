@@ -75,20 +75,16 @@ connection.connect(err => {
 });
 
 //---------------login server-------------------
-
-// Route to serve HTML form
 app.get('/login', (req, res) => {
     console.log('GET request received at /');
     res.sendFile(__dirname + '/index_login.html');
 });
 
-
-// Route to handle form submission and update data
+// Route to handle Student login
 app.post('/student-module/index_login.html/submit', (req, res) => {
     console.log('POST request received at /student-login/index_login.html/submit');
     const {loginId, password } = req.body;
-    console.log('Received loginId:', loginId);
-    console.log('Received password:', password);
+    console.log('Received loginId:', loginId); console.log('Received password:', password);
     const sql = 'SELECT username,pswd FROM user_master_tbl WHERE username = ? and u_type="student"';
     console.log(sql);
     connection.query(sql, [loginId], (err, result) => {
@@ -96,7 +92,6 @@ app.post('/student-module/index_login.html/submit', (req, res) => {
             console.error('Error executing MySQL query:', err);
             return res.status(500).json({ message: 'Internal server error' });
         }
-
         if (result.length === 1 && result[0].pswd === password) {
             // Successful login
             req.session.loginId = loginId; //stored loginid in session
@@ -104,7 +99,6 @@ app.post('/student-module/index_login.html/submit', (req, res) => {
             return res.status(200).json({ message: 'Login successful' });
             
         } 
-        
         else {
             // Incorrect credentials
             return res.status(401).json({ message: 'Incorrect username or password' });
@@ -113,8 +107,6 @@ app.post('/student-module/index_login.html/submit', (req, res) => {
 });
 
 //-----------student page server----------
-
-// Route to serve HTML form
 app.get('/page', (req, res) => {
     console.log('GET request received at /');
     res.sendFile(__dirname + '/index_spage.html');

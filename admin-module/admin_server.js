@@ -10,7 +10,7 @@ const port2 = 3041;
 const port3 = 3042;
 const port4 = 3043; 
 const port5 = 3044;
-const port6 = 3135;
+const port6 = 3070;
 const port7 = 3036;
 
 //generating random string for the session:
@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Shreya_29', //sh@1210520
+    password: 'sh@1210520', //sh@1210520
     database: 'shms'
 });
 
@@ -59,12 +59,7 @@ connection.connect(err => {
 app.set('view engine', 'ejs');
 
 
-// Route to serve HTML form
 
-app.get('/alogin', (req, res) => {
-    console.log('GET request received at /');
-    res.sendFile(__dirname + '/index_alogin.html');
-});
 
 //-----------------------logout--------------------------------------
 
@@ -81,7 +76,12 @@ app.get('/logout', (req, res) => {
 });
 
 
-// Route to handle form submission and update data
+//------------------------login server-----------------------------------
+app.get('/alogin', (req, res) => {
+    console.log('GET request received at /');
+    res.sendFile(__dirname + '/index_alogin.html');
+});
+// Route to handle Admin Login
 app.post('/admin-module/index_alogin.html/submit', (req, res) => {
     console.log('POST request received at /admin-module/index_alogin.html/submit');
     const {loginId, password } = req.body;
@@ -107,7 +107,6 @@ app.post('/admin-module/index_alogin.html/submit', (req, res) => {
         }
     });
 });
-
 // route for admin page 
 app.get('/adminp', (req, res) => {
     console.log('GET request received at /');
@@ -200,6 +199,6 @@ app.listen(port6, () => {
 });
 
 // Start server
-app.listen(port6, () => {
+app.listen(port7, () => {
     console.log(`Server is running on http://localhost:${port7}/logout`);
 });

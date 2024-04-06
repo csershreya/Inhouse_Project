@@ -157,27 +157,18 @@
                 <th>RequestId</th>
                 <th>Room Number</th>
                 <th>Status</th>
-                <!-- Add more table headers if needed -->
+                <!-- More table headers can be added if needed -->
             </tr>
         </thead>
         <tbody>
             <% data.forEach(item => { %>
-                
                 <tr>
                     <td><%= item.s_id %></td>
                     <td><%= item.request_id %></td>
                     <td><%= item.room_no %></td>
-
                     <td>
-                        <!-- Add buttons in the Actions column -->
-                        <!-- <form action="/warden-module/views/viewreq.ejs/approve" method="post"> -->
                         <button class="button__primary" onclick="approveRequest('<%= item.request_id %>')">Approve</button>
-                        <!-- </form> -->
-
-                        <!-- <form action="/warden-module/views/viewreq.ejs/decline" method="post"> -->
                         <button class="button__primary" onclick="declineRequest('<%= item.request_id %>')">Decline</button>
-                        <!-- </form> -->
-                        <!-- Add more buttons or customize as needed -->
                     </td>
                     <!-- Add more table data if needed -->
                 </tr>
