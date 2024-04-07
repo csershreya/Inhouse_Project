@@ -235,7 +235,6 @@ app.get('/requests', (req, res) => {
     });
 });
 
-
 // Endpoint for the warden to approve or decline room allocation requests
 app.post('/warden-module/views/viewreq.ejs', (req, res) => {
     const { requestId, approvalStatus } = req.body;
@@ -255,48 +254,193 @@ app.post('/warden-module/views/viewreq.ejs', (req, res) => {
             const { s_id, room_no, h_id } = results[0];
 
             const updateRequestStatusQuery = `UPDATE room_allocation_requests SET sts = 'approved' WHERE request_id = ? `;
-            connection.query(updateRequestStatusQuery, [requestId, room_no, h_id], (err, results) => {
+            connection.query(updateRequestStatusQuery, [requestId], (err, results) => {
                 if (err) {
                     console.error('Error updating request status:', err);
                     return res.status(500).json({ error: 'Internal server error' });
                 }
 
-        // Insert the record into hostel_room_stu_reln_tbl
-        const insertRoomAllocationQuery = `INSERT INTO hostel_room_stu_reln_tbl (s_id, room_no, h_id) VALUES (?, ?, ?)`;
-        connection.query(insertRoomAllocationQuery, [s_id, room_no, h_id], (err, results) => {
-            if (err) {
-                console.error('Error inserting room allocation:', err);
-                return res.status(500).json({ error: 'Internal server error' });
-            }
+                // Insert the record into hostel_room_stu_reln_tbl
+                const insertRoomAllocationQuery = `INSERT INTO hostel_room_stu_reln_tbl (s_id, room_no, h_id) VALUES (?, ?, ?)`;
+                connection.query(insertRoomAllocationQuery, [s_id, room_no, h_id], (err, results) => {
+                    if (err) {
+                        if (err.code === 'ER_DUP_ENTRY') {
+                            console.error('Duplicate entry error:', err);
+                            return res.status(400).json({ error: 'Room allocation failed: Student already has a room' });
+                        } else {
+                            console.error('Error inserting room allocation:', err);
+                            return res.status(500).json({ error: 'Internal server error' });
+                        }
+                    }
 
-            return res.status(200).json({ message: "Room allocated successfully" });
-            });
-        // Update vacant seats count
-        const update_vacant = `UPDATE room_master_tbl SET vaccant = vaccant-1 WHERE h_id = ? AND room_no = ?`;
-        connection.query(update_vacant, [h_id, room_no], (err, results) => {
-            if (err) {
-                console.error('Error updating vacant seats count: ' + err);
-                return res.status(500).json({ error: 'Internal server error' });
-            }
-            return res.status(200).json({ message: "Room allocated successfully" });
+                    // Update vacant seats count
+                    const updateVacant = `UPDATE room_master_tbl SET vaccant = vaccant-1 WHERE h_id = ? AND room_no = ?`;
+                    connection.query(updateVacant, [h_id, room_no], (err, results) => {
+                        if (err) {
+                            console.error('Error updating vacant seats count:', err);
+                            return res.status(500).json({ error: 'Internal server error' });
+                        }
+                        return res.status(200).json({ success: true, message: 'Room allocated successfully' });
+                    });
+                });
             });
         });
-        });
-    } 
-    else if (approvalStatus === 'declined') {
+    } else if (approvalStatus === 'declined') {
         const deleteRequestQuery = `DELETE FROM room_allocation_requests WHERE request_id = ?`;
         connection.query(deleteRequestQuery, [requestId], (err, results) => {
             if (err) {
                 console.error('Error deleting request:', err);
                 return res.status(500).json({ error: 'Internal server error' });
             }
-            return res.status(200).json({ message: "Room allocation request declined" });
+            return res.status(200).json({ message: 'Room allocation request declined' });
         });
-    } 
-    else {
+    } else {
         return res.status(400).json({ error: 'Invalid approval status' });
     }
 });
+
+
+
+// // Endpoint for the warden to approve or decline room allocation requests
+// app.post('/warden-module/views/viewreq.ejs', (req, res) => {
+//     const { requestId, approvalStatus } = req.body;
+
+//     if (approvalStatus === 'approved') {
+//         // Fetch the request details before updating the request status
+//         const getRequestDetailsQuery = `SELECT s_id, room_no, h_id FROM room_allocation_requests WHERE request_id = ?`;
+//         connection.query(getRequestDetailsQuery, [requestId], (err, results) => {
+//             if (err) {
+//                 console.error('Error fetching request details:', err);
+//                 return res.status(500).json({ error: 'Internal server error' });
+//             }
+
+//             if (results.length === 0) {
+//                 return res.status(404).json({ error: 'Request ID not found' });
+//             }
+
+//             const { s_id, room_no, h_id } = results[0];
+
+//             // Check if the student already has an allocated room
+//             const checkExistingAllocationQuery = `SELECT * FROM hostel_room_stu_reln_tbl WHERE s_id = ?`;
+//             connection.query(checkExistingAllocationQuery, [s_id], (err, existingResults) => {
+//                 if (err) {
+//                     console.error('Error checking existing allocation:', err);
+//                     return res.status(500).json({ error: 'Internal server error' });
+//                 }
+
+//                 if (existingResults.length > 0) {
+//                     return res.status(400).json({ error: 'Student already has an allocated room' });
+//                 }
+
+//                 // Update the request status to 'approved'
+//                 const updateRequestStatusQuery = `UPDATE room_allocation_requests SET sts = 'approved' WHERE request_id = ?`;
+//                 connection.query(updateRequestStatusQuery, [requestId], (err, updateResults) => {
+//                     if (err) {
+//                         console.error('Error updating request status:', err);
+//                         return res.status(500).json({ error: 'Internal server error' });
+//                     }
+
+//                     // Insert the record into hostel_room_stu_reln_tbl
+//                     const insertRoomAllocationQuery = `INSERT INTO hostel_room_stu_reln_tbl (s_id, room_no, h_id) VALUES (?, ?, ?)`;
+//                     connection.query(insertRoomAllocationQuery, [s_id, room_no, h_id], (err, insertResults) => {
+//                         if (err) {
+//                             console.error('Error inserting room allocation:', err);
+//                             return res.status(500).json({ error: 'Internal server error' });
+//                         }
+
+//                         // Update vacant seats count
+//                         const updateVacantQuery = `UPDATE room_master_tbl SET vaccant = vaccant - 1 WHERE h_id = ? AND room_no = ?`;
+//                         connection.query(updateVacantQuery, [h_id, room_no], (err, updateVacantResults) => {
+//                             if (err) {
+//                                 console.error('Error updating vacant seats count:', err);
+//                                 return res.status(500).json({ error: 'Internal server error' });
+//                             }
+
+//                             return res.status(200).json({ message: "Room allocated successfully" });
+//                         });
+//                     });
+//                 });
+//             });
+//         });
+//     } else if (approvalStatus === 'declined') {
+//         // Delete the request if declined
+//         const deleteRequestQuery = `DELETE FROM room_allocation_requests WHERE request_id = ?`;
+//         connection.query(deleteRequestQuery, [requestId], (err, results) => {
+//             if (err) {
+//                 console.error('Error deleting request:', err);
+//                 return res.status(500).json({ error: 'Internal server error' });
+//             }
+
+//             return res.status(200).json({ message: "Room allocation request declined" });
+//         });
+//     } else {
+//         return res.status(400).json({ error: 'Invalid approval status' });
+//     }
+// });
+
+
+
+// // Endpoint for the warden to approve or decline room allocation requests
+// app.post('/warden-module/views/viewreq.ejs', (req, res) => {
+//     const { requestId, approvalStatus } = req.body;
+
+//     if (approvalStatus === 'approved') {
+//         // Fetch the s_id before updating the request status
+//         const getStudentIdQuery = `SELECT s_id, room_no, h_id FROM room_allocation_requests WHERE request_id = ?`;
+//         connection.query(getStudentIdQuery, [requestId], (err, results) => {
+//             if (err) {
+//                 console.error('Error fetching student ID:', err);
+//                 return res.status(500).json({ error: 'Internal server error' });
+//             }
+
+//             if (results.length === 0) {
+//                 return res.status(404).json({ error: 'Request ID not found' });
+//             }
+//             const { s_id, room_no, h_id } = results[0];
+
+//             const updateRequestStatusQuery = `UPDATE room_allocation_requests SET sts = 'approved' WHERE request_id = ? `;
+//             connection.query(updateRequestStatusQuery, [requestId, room_no, h_id], (err, results) => {
+//                 if (err) {
+//                     console.error('Error updating request status:', err);
+//                     return res.status(500).json({ error: 'Internal server error' });
+//                 }
+
+//         // Insert the record into hostel_room_stu_reln_tbl
+//         const insertRoomAllocationQuery = `INSERT INTO hostel_room_stu_reln_tbl (s_id, room_no, h_id) VALUES (?, ?, ?)`;
+//         connection.query(insertRoomAllocationQuery, [s_id, room_no, h_id], (err, results) => {
+//             if (err) {
+//                 console.error('Error inserting room allocation:', err);
+//                 return res.status(500).json({ error: 'Internal server error' });
+//             }
+
+//             return res.status(200).json({ message: "Room allocated successfully" });
+//             });
+//         // Update vacant seats count
+//         const update_vacant = `UPDATE room_master_tbl SET vaccant = vaccant-1 WHERE h_id = ? AND room_no = ?`;
+//         connection.query(update_vacant, [h_id, room_no], (err, results) => {
+//             if (err) {
+//                 console.error('Error updating vacant seats count: ' + err);
+//                 return res.status(500).json({ error: 'Internal server error' });
+//             }
+//             return res.status(200).json({ message: "Room allocated successfully" });
+//             });
+//         });
+//         });
+//     } 
+//     else if (approvalStatus === 'declined') {
+//         const deleteRequestQuery = `DELETE FROM room_allocation_requests WHERE request_id = ?`;
+//         connection.query(deleteRequestQuery, [requestId], (err, results) => {
+//             if (err) {
+//                 console.error('Error deleting request:', err);
+//                 return res.status(500).json({ error: 'Internal server error' });
+//             }
+//             return res.status(200).json({ message: "Room allocation request declined" });
+//         });
+//     } 
+//     else {
+//         return res.status(400).json({ error: 'Invalid approval status' });
+//     }
+// });
 
 
    

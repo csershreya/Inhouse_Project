@@ -181,13 +181,12 @@
             console.log(requestId);
             sendApprovalRequest(requestId, 'approved');
         }
-
+    
         function declineRequest(requestId) {
             sendApprovalRequest(requestId, 'declined');
         }
-
+    
         function sendApprovalRequest(requestId, approvalStatus) {
-            
             fetch('/warden-module/views/viewreq.ejs', {
                 method: 'POST',
                 headers: {
@@ -201,7 +200,12 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data); // Handle response as needed
-                // Refresh the page or update UI as needed
+                if (data.success) {
+                    // Show notification only if room is successfully allocated
+                    alert('Room allocated successfully');
+                }
+                // Refresh the page after the request is processed
+                location.reload();
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -209,6 +213,7 @@
             });
         }
     </script>
+    
 
 </body>
 </html>
