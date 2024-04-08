@@ -61,7 +61,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Shreya_29',
+    password: 'sh@1210520',
     database: 'shms'
 });
 
@@ -111,14 +111,15 @@ app.get('/page', (req, res) => {
     console.log('GET request received at /');
     res.sendFile(__dirname + '/index_spage.html');
 });
+
 // Route to handle form submission and update data
 app.post('/student-module/index_spage.html/submit', (req, res) => {
     console.log('POST request received at /student-pagee/index_spage.html/submit');
     const { d_type, current, d_new } = req.body;
     const userId = req.session.loginId;
     const request_id =  generateRequestId();  //Generate a unique request ID
-    const sql = `INSERT INTO shms.update_requests_tbl (request_id,s_id, d_type, d_current, d_new) VALUES (?, ?, ?, ?,?)`;
-    connection.query(sql, [request_id,userId, d_type, current, d_new], (err, result) => {
+    const sql = `INSERT INTO shms.update_requests_tbl (request_id, s_id, d_type, d_current,sts, d_new) VALUES (?, ?, ?, ?,'pending',?)`;
+    connection.query(sql, [request_id, userId, d_type, current, d_new], (err, result) => {
         if (err) {
             console.error('Error submitting update request:', err);
             res.status(500).send('Error submitting update request');

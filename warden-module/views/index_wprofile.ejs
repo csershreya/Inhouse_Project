@@ -156,11 +156,11 @@
         
         <thead>
             <tr>
-                <th>Warden ID</th>
-                <th>Warden Name</th>
+                <th>My UserID</th>
+                <th>Name</th>
+                <th>Designation</th>
                 <th>Hostel</th>
                 <th>Phone No.</th>
-                <th>Email</th>
                 <th>Password</th>
                 <!-- Add more table headers if needed -->
             </tr>
@@ -168,13 +168,12 @@
         <tbody>
             <% data.forEach(item => { %>
                 <tr>
-                    <td contenteditable="true"></td>
-                    <td contenteditable="true"></td>
-                    <td contenteditable="true"></td>
-                    <td contenteditable="true"></td>
-                    <td contenteditable="true"><td>
-                    <td contenteditable="true"></td>
-                    <!-- <td><%= item.detail_new %>  </td> -->
+                    <td><%= item.username %></td>
+                    <td><%= item.w_name %></td>
+                    <td><%= item.w_type %></td>
+                    <td><%= item.h_id %></td>
+                    <td><%= item.w_contact %></td>
+                    <td><%= item.pswd %></td>
                     <!-- Add more table data if needed -->
                 </tr>
             <% }); %>
@@ -182,7 +181,7 @@
     </table>
     <div class="logout">
     <button class="button__primary"><a href="">Change password</a></button>
-    <button class="button__primary"><a href="">Logout</a></button>
+    <button class="button__primary"><a href="http://localhost:3054/logout">Logout</a></button>
 </div>
 </body>
 </html>

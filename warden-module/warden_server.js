@@ -9,6 +9,7 @@ const port4 = 3087;
 const port5 = 3054;
 const port = 3053;
 const port6= 3055;
+const port7= 3056;
 
 //generating random string for the session:
 const crypto = require('crypto');
@@ -38,7 +39,7 @@ app.use(session({
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Shreya_29',
+    password: 'sh@1210520',
     database: 'shms'
 });
  
@@ -91,6 +92,7 @@ app.post('/warden-module/index_wlogin.html/submit', (req, res) => {
 
         if (result.length === 1 && result[0].pswd === password) {
             // Successful login
+            req.session.loginId = loginId;
             return res.status(200).json({ message: 'Login successful' });
             
         } 
@@ -108,10 +110,25 @@ app.get('/wardenp', (req, res) => {
     res.sendFile(__dirname + '/index_wpage.html');
 });
 
+//--------------------PROFILE-------------------------------------------
+//viewing profile of a student using student_master_tbl
+app.get('/profile', (req, res) => {
+    const userId = req.session.loginId;
+    const sql = 'SELECT user_master_tbl.username, warden_master_tbl.w_name, warden_master_tbl.w_type, warden_master_tbl.h_id,warden_master_tbl.w_contact,user_master_tbl.pswd FROM user_master_tbl INNER JOIN warden_master_tbl ON user_master_tbl.username=warden_master_tbl.w_id where user_master_tbl.username=?'; 
+    connection.query(sql,[userId],(err, rows) => {
+        if (err) {
+            console.error('Error fetching data:', err);
+            res.status(500).send('Error fetching data');
+        } else {
+            res.render('index_wprofile', { data: rows });
+        }
+    });
+});
+
 // Route for data from update_tbl having update requests
 
 app.get('/update', (req, res) => {
-    const sql = 'SELECT * FROM update_requests_tbl';
+    const sql = 'SELECT s_id, d_type, d_current,d_new,request_id, sts FROM update_requests_tbl';
     connection.query(sql, (err, rows) => {
         if (err) {
             console.error('Error fetching data from update_tbl:', err);
@@ -137,8 +154,7 @@ app.post('/warden-module/view/index1.ejs', (req, res) => {
 
             if (approvalStatus === 'approved') {
                 // Fetch the update details and update the student database
-                const fetchUpdateDetailsQuery = `
-                    SELECT s_id, d_type, d_current, d_new FROM update_requests_tbl WHERE request_id = ?`;
+                const fetchUpdateDetailsQuery = `SELECT s_id, d_type, d_current, d_new, request_id FROM update_requests_tbl WHERE request_id = ?`;
                 connection.query(fetchUpdateDetailsQuery, [requestId], (err, results) => {
                     if (err) {
                         console.error('Error fetching update details:', err);
@@ -149,32 +165,25 @@ app.post('/warden-module/view/index1.ejs', (req, res) => {
                     let updateAttributeQuery;
                     switch (d_type) {
                         case 'email':
-                            updateAttributeQuery = `
-                                UPDATE student_master_tbl SET email = ? WHERE st_id = ? AND email= ?`;
+                            updateAttributeQuery = `UPDATE student_master_tbl SET email = ? WHERE st_id = ? AND email = ?`;
                             break;
                         case 'number':
-                            updateAttributeQuery = `
-                                UPDATE student_master_tbl SET st_phno = ? WHERE st_id = ? AND st_phno = ?`;
+                            updateAttributeQuery = `UPDATE student_master_tbl SET st_phno = ? WHERE st_id = ? AND st_phno = ?`;
                             break;
-                        case "parents":
-                            updateAttributeQuery = `
-                                UPDATE student_master_tbl SET f_phno = ? WHERE st_id = ? AND f_phno = ?`;
+                        case 'parents':
+                            updateAttributeQuery = `UPDATE student_master_tbl SET f_phno = ? WHERE st_id = ? AND f_phno = ?`;
                             break;
                         case 'address':
-                            updateAttributeQuery = `
-                                UPDATE student_master_tbl SET address = ? WHERE st_id = ? AND address = ?`;
+                            updateAttributeQuery = `UPDATE student_master_tbl SET address = ? WHERE st_id = ? AND address = ?`;
                             break;
                         case 'city':
-                            updateAttributeQuery = `
-                                UPDATE student_master_tbl SET city = ? WHERE st_id = ? AND city = ?`;
+                            updateAttributeQuery = `UPDATE student_master_tbl SET city = ? WHERE st_id = ? AND city = ?`;
                             break;
                         case 'pincode':
-                            updateAttributeQuery = `
-                                UPDATE student_master_tbl SET pincode = ? WHERE st_id = ? AND pincode = ?`;
+                            updateAttributeQuery = `UPDATE student_master_tbl SET pincode = ? WHERE st_id = ? AND pincode = ?`;
                             break;
                         case 'state':
-                            updateAttributeQuery = `
-                                UPDATE student_master_tbl SET state = ? WHERE st_id = ? AND state = ?`;
+                            updateAttributeQuery = `UPDATE student_master_tbl SET state = ? WHERE st_id = ? AND state = ?`;
                             break;
                         default:
                             return res.status(400).json({ error: 'Invalid detail type' });
@@ -190,20 +199,18 @@ app.post('/warden-module/view/index1.ejs', (req, res) => {
                     });
                 });
             } else {
-                return res.status(200).json({ message: "Update request declined" });
-            }
-        });
-    } else if (approvalStatus === 'declined') {
-        const deleteRequestQuery = `DELETE FROM update_requests_tbl WHERE request_id = ?`;
-        connection.query(deleteRequestQuery, [requestId], (err, results) => {
-            if (err) {
-                console.error('Error deleting request:', err);
-                return res.status(500).json({ error: 'Internal server error' });
-            }
+                const deleteRequestQuery = `DELETE FROM update_requests_tbl WHERE request_id = ?`;
+                connection.query(deleteRequestQuery, [requestId], (err, results) => {
+                    if (err) {
+                        console.error('Error deleting request:', err);
+                        return res.status(500).json({ error: 'Internal server error' });
+                    }
 
-            return res.status(200).json({ message: "Update request request declined" });
+                    return res.status(200).json({ message: "Update request declined" });
+                });
+            }
         });
-    }else {
+    } else {
         return res.status(400).json({ error: 'Invalid approval status' });
     }
 });
@@ -317,7 +324,7 @@ app.listen(port, () => {
 
 
 app.listen(port1, () => {
-    console.log(`Server for update_tbl is running on http://localhost:${port1}/update`);
+    console.log(`Server for update_requests_tbl is running on http://localhost:${port1}/update`);
 });
 
 app.listen(port2, () => {
@@ -333,6 +340,9 @@ app.listen(port5, () => {
 });
 
 app.listen(port6, () => {
-    console.log(`Server for logout is running on http://localhost:${port6}/requests`);
+    console.log(`Server for room_alloc_requests is running on http://localhost:${port6}/requests`);
 });
 
+app.listen(port7, () => {
+    console.log(`Server for profile is running on http://localhost:${port7}/profile`);
+});

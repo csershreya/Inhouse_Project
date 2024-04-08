@@ -12,7 +12,7 @@ const port4 = 3043;
 const port5 = 3044;
 const port6 = 3070;
 const port7 = 3036;
-
+const port8 = 3045;
 //generating random string for the session:
 const crypto = require('crypto');
 const generateRandomSecret = () => {
@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Shreya_29', //sh@1210520
+    password: 'sh@1210520', //sh@1210520
     database: 'shms'
 });
 
@@ -166,7 +166,11 @@ app.get('/course_tbl', (req, res) => {
     });
 });
 
-
+//profile
+app.get('/profile',(req,res)=>{
+    console.log('GET request received at /');
+    res.sendFile(__dirname + '/index_aprofile.html');
+});
 
 // Start server
 app.listen(port1, () => {
@@ -201,4 +205,9 @@ app.listen(port6, () => {
 // Start server
 app.listen(port7, () => {
     console.log(`Server is running on http://localhost:${port7}/logout`);
+});
+
+// Start server
+app.listen(port8, () => {
+    console.log(`Server is running on http://localhost:${port8}/profile`);
 });
