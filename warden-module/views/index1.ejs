@@ -160,7 +160,7 @@
                 <th>Status</th>
                 <th>Request ID</th>
                 <th>Actions</th>
-                <!-- Add more table headers if needed -->
+                <!-- Add more table headers if needed --> 
             </tr>
         </thead>
         <tbody>
@@ -208,7 +208,13 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data); // Handle response as needed
-                // Refresh the page or update UI as needed
+                if (data.success) {
+                    // Show notification only if room is successfully allocated
+                    alert('Room allocated successfully');
+                }
+                // Refresh the page after the request is processed
+                location.reload();
+                
             })
             .catch(error => {
                 console.error('Error:', error);

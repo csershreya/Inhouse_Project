@@ -143,6 +143,10 @@
     th {
             background-color: #f2f2f2;
         }
+        .save_button{
+            margin-top: 2%;
+         margin-left: 47%; 
+        }
     </style>
 </head>
     
@@ -165,15 +169,51 @@
         <tbody>
             <% data.forEach(item => { %>
                 <tr>
-                    <td><%= item.h_id %></td>
-                    <td><%= item.h_name %></td>
-                    <td><%= item.no_floors %></td>
-                    <td><%= item.no_rooms %></td>
+                    <td  contenteditable="true"><%= item.h_id %></td>
+                    <td  contenteditable="true"><%= item.h_name %></td>
+                    <td  contenteditable="true"><%= item.no_floors %></td>
+                    <td  contenteditable="true"><%= item.no_rooms %></td>
                     
                     <!-- Add more table data if needed -->
                 </tr>
             <% }); %>
         </tbody>
     </table>
+    <script>
+        function saveTable() {
+            var tableData = [];
+            var rows = document.getElementById("editableTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+        
+            for (var i = 0; i < rows.length; i++) {
+                var rowData = {};
+                var cells = rows[i].getElementsByTagName("td");
+                rowData.h_id = cells[0].innerText; // Adjusted property names
+                rowData.h_name = cells[1].innerText; // Adjusted property names
+                rowData.no_floors = cells[2].innerText; // Adjusted property names
+                rowData.no_rooms = cells[3].innerText; // Adjusted property names
+                tableData.push(rowData);
+            }
+        
+            // Sending the tableData to the server using fetch API
+            fetch('/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(tableData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    <div class="save_button">
+      <button class="button__primary" onclick="saveTable()" id="save"> Save Changes </button>
+    </div>
 </body>
 </html>

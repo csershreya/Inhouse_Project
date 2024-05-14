@@ -8,7 +8,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
-        <title>available room</title>
+        <title>Data from MySQL</title>
     </head>
     <body>
         <header>
@@ -19,7 +19,7 @@
                 <div class="navbar_nav_items">
                     <div class="nav_item_1">
                         <button class="button__primary_1"><a href="http://localhost:3095/home">Home</a></button>
-                        <button class="button__primary"><a href="http://localhost:3090/aboutus"> About us </a> </button>
+                        <button class="button__primary"><a href="http://localhost:3090/aboutus"> About us</a></button>
                         
                 </div>
                 </div>
@@ -120,69 +120,56 @@
     color: #e8e8eb;
     text-decoration: none;
     }
-    .profile_head{
+    .complaint_head{
         margin-top: 3%;
         margin-bottom: 3%;
         margin-left: 40%;
         font-family:'Times New Roman', Times, serif;
         font-size: 28px;
-    }
-    .logout{
-        margin-top: 5%;
-        text-align: center;
+        
+        
     }
 
     table {
             border-collapse: collapse;
-            width: 70%;
-            margin-left: 15%;
+            width: 90%;
+            margin-left: 5%;
     }
    th, td {
-            border: 2px solid  rgb(169, 197, 225);
+            border: 1px solid black;
             padding: 8px;
-            text-align: center;
+            text-align: left;
         }
     th {
-            background-color:  rgb(169, 197, 225);
+            background-color: #f2f2f2;
         }
-        
     </style>
 </head>
+
 <body>
-    <div class="profile_head">
-    <h1> My Profile</h1>
-</div>
+    <div class="complaint_head">
+    <h1>Room Allocation Details</h1>
+    </div>
     <table>
-        
         <thead>
             <tr>
-                <th>Student Name</th>
                 <th>Student ID</th>
-                <th>Student Roll No.</th>
-                <th>Program</th>
-                <th>Subject</th>
-                <th>Email</th>
+                <th>Student Name</th>
+                <th>Romm No</th>
+                
                 <!-- Add more table headers if needed -->
             </tr>
         </thead>
         <tbody>
             <% data.forEach(item => { %>
                 <tr>
-                    <td contenteditable="true"><%= item.st_name %></td>
-                    <td contenteditable="true"><%= item.st_id %></td>
-                    <td contenteditable="true"><%= item.st_roll %></td>
-                    <td contenteditable="true"><%= item.program %></td>
-                    <td contenteditable="true"><%= item.sub %></td>
-                    <td contenteditable="true"><%= item.email %></td>
-                    <!-- <td><%= item.detail_new %>  </td> -->
+                    <td><%= item.s_id %></td>
+                    <td><%= item.st_name %></td>
+                    <td><%= item.room_no %></td>
                     <!-- Add more table data if needed -->
                 </tr>
             <% }); %>
         </tbody>
     </table>
-    <div class="logout">
-    <button class="button__primary"><a href="">Change password</a></button>
-    <button class="button__primary"><a href="http://localhost:3088/logout">Logout</a></button>
-</div>
 </body>
 </html>

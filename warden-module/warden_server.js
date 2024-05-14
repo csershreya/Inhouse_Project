@@ -10,6 +10,7 @@ const port5 = 3054;
 const port = 3053;
 const port6= 3055;
 const port7= 3056;
+const port8= 3057;
 
 //generating random string for the session:
 const crypto = require('crypto');
@@ -141,11 +142,11 @@ app.get('/update', (req, res) => {
 
 
 // Route to handle warden's approval of update requests
-app.post('/warden-module/view/index1.ejs', (req, res) => {
+app.post('/warden-module/views/index1.ejs', (req, res) => {
     const { requestId, approvalStatus } = req.body;
 
     if (approvalStatus === 'approved' || approvalStatus === 'declined') {
-        const updateRequestStatusQuery = `UPDATE update_requests_tbl SET status = ? WHERE request_id = ?`;
+        const updateRequestStatusQuery = `UPDATE update_requests_tbl SET sts = ? WHERE request_id = ?`;
         connection.query(updateRequestStatusQuery, [approvalStatus, requestId], (err, results) => {
             if (err) {
                 console.error('Error updating request status:', err);
@@ -154,7 +155,7 @@ app.post('/warden-module/view/index1.ejs', (req, res) => {
 
             if (approvalStatus === 'approved') {
                 // Fetch the update details and update the student database
-                const fetchUpdateDetailsQuery = `SELECT s_id, d_type, d_current, d_new, request_id FROM update_requests_tbl WHERE request_id = ?`;
+                const fetchUpdateDetailsQuery = `SELECT s_id, d_type, d_current, d_new FROM update_requests_tbl WHERE request_id = ?`;
                 connection.query(fetchUpdateDetailsQuery, [requestId], (err, results) => {
                     if (err) {
                         console.error('Error fetching update details:', err);
@@ -229,9 +230,35 @@ app.get('/feedback', (req, res) => {
     });
 });
 
+//displaying records
+app.get('/records', (req, res) => {
+    const sql = 'SELECT * FROM student_master_tbl';
+    connection.query(sql, (err, rows) => {
+        if (err) {
+            console.error('Error fetching data from student_master_tbl:', err);
+            res.status(500).send('Error fetching data from student_master_tbl');
+        } else {
+            res.render('index3', { data: rows });
+        }
+    });
+});
+
+//route to fetch room allocation details
+app.get('/room_details', (req, res) => {
+    const id=req.session.loginId;
+    const sql = 'SELECT hostel_room_stu_reln_tbl.s_id, student_master_tbl.st_name, hostel_room_stu_reln_tbl.room_no from hostel_room_stu_reln_tbl join student_master_tbl on hostel_room_stu_reln_tbl.s_id=student_master_tbl.email join warden_master_tbl on hostel_room_stu_reln_tbl.h_id=warden_master_tbl.h_id where w_id=?';
+    connection.query(sql,[id], (err, rows) => {
+        if (err) {
+            console.error('Error fetching data from feedback_tbl:', err);
+            res.status(500).send('Error fetching data from feedback_tbl');
+        } else {
+            res.render('index4', { data: rows });
+        }
+    });
+});
 //Route to fetch data from room_allocation_request table containing requests for aquiring the room
 app.get('/requests', (req, res) => {
-    const sql = `SELECT s_id,request_id,room_no FROM room_allocation_requests where sts='pending'`; 
+    const sql = `SELECT s_id,request_id,room_no, sts FROM room_allocation_requests`; 
     connection.query(sql, (err, rows) => {
         if (err) {
             console.error('Error fetching data:', err);
@@ -490,3 +517,8 @@ app.listen(port6, () => {
 app.listen(port7, () => {
     console.log(`Server for profile is running on http://localhost:${port7}/profile`);
 });
+
+app.listen(port8, () => {
+    console.log(`Server for room_details is running on http://localhost:${port8}/room_details`);
+});
+

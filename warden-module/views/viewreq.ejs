@@ -157,6 +157,7 @@
                 <th>RequestId</th>
                 <th>Room Number</th>
                 <th>Status</th>
+                <th>Action</th>
                 <!-- More table headers can be added if needed -->
             </tr>
         </thead>
@@ -166,11 +167,12 @@
                     <td><%= item.s_id %></td>
                     <td><%= item.request_id %></td>
                     <td><%= item.room_no %></td>
+                    <td><%= item.sts %></td>
                     <td>
                         <button class="button__primary" onclick="approveRequest('<%= item.request_id %>')">Approve</button>
                         <button class="button__primary" onclick="declineRequest('<%= item.request_id %>')">Decline</button>
                     </td>
-                    <!-- Add more table data if needed -->
+                    <!-- Add more table data if needed --> 
                 </tr>
             <% }); %>
         </tbody>

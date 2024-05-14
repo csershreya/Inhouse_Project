@@ -165,9 +165,9 @@
         <tbody>
            
                 <tr>
-                    <td>admin123@gmail.com</td>
-                    <td>CS41</td>
-                    <td>ad12345</td>
+                    <td contenteditable="true">admin123@gmail.com</td>
+                    <td contenteditable="true">CS41</td>
+                    <td contenteditable="true">ad12345</td>
                 </tr>
             
         </tbody>
@@ -178,24 +178,35 @@
             var rows = document.getElementById("editableTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
         
             for (var i = 0; i < rows.length; i++) {
-                var rowData = [];
+                var rowData = {};
                 var cells = rows[i].getElementsByTagName("td");
-                for (var j = 0; j < cells.length; j++) {
-                    rowData.push(cells[j].innerText);
-                }
+                rowData.name = cells[0].innerText;
+                rowData.age = cells[1].innerText;
+                rowData.country = cells[2].innerText;
                 tableData.push(rowData);
             }
         
-            // Here, you can send the tableData to the server or save it locally
-            console.log(tableData);
-            // For example, you can use localStorage to save the data locally
-            localStorage.setItem("editableTableData", JSON.stringify(tableData));
-            alert("Table data saved successfully!");
+            // Sending the tableData to the server using fetch API
+            fetch('/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(tableData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
-        </script>
+    </script>
     <div class="logout">
-    <button class="button__primary"><a href="">Change password</a></button>
-    <button class="button__primary"><a href="">Logout</a></button>
+    <button class="button__primary" onclick="saveTable()"> Save Changes </button>
+    <button class="button__primary"><a href="http://localhost:3036/logout">Logout</a></button>
 </div>
 </body>
 </html>

@@ -143,7 +143,11 @@
     th {
             background-color: #f2f2f2;
         }
-    </style>
+        .save_button{
+            margin-top: 2%;
+         margin-left: 47%; 
+        }
+        </style>
 </head>
     
 <body>
@@ -157,7 +161,6 @@
                 <th>Hostel_id</th>
                 <th>Warden_type</th>
                 <th>Warden_name</th>
-                <th>Warden_email</th>
                 <th>Warden_contact</th>
                 
                 <!-- Add more table headers if needed -->
@@ -167,17 +170,51 @@
         <tbody>
             <% data.forEach(item => { %>
                 <tr>
-                    <td><%= item.w_id %></td>
-                    <td><%= item.h_id %></td>
-                    <td><%= item.w_type %></td>
-                    <td><%= item.w_name %></td>
-                    <td><%= item.w_email %></td>
-                    <td><%= item.w_contact %></td>
+                    <td contenteditable="true"><%= item.w_id %></td>
+                    <td contenteditable="true"><%= item.h_id %></td>
+                    <td contenteditable="true"><%= item.w_type %></td>
+                    <td contenteditable="true"><%= item.w_name %></td>
+                    <td contenteditable="true"><%= item.w_contact %></td>
                     
                     <!-- Add more table data if needed -->
                 </tr>
             <% }); %>
         </tbody>
     </table>
+    <script>
+        function saveTable() {
+            var tableData = [];
+            var rows = document.getElementById("editableTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+        
+            for (var i = 0; i < rows.length; i++) {
+                var rowData = {};
+                var cells = rows[i].getElementsByTagName("td");
+                rowData.name = cells[0].innerText;
+                rowData.age = cells[1].innerText;
+                rowData.country = cells[2].innerText;
+                tableData.push(rowData);
+            }
+        
+            // Sending the tableData to the server using fetch API
+            fetch('/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(tableData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    <div class="save_button">
+      <button class="button__primary" onclick="saveTable()"> Save Changes </button>
+    </div>
 </body>
 </html>

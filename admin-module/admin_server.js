@@ -13,6 +13,10 @@ const port5 = 3044;
 const port6 = 3070;
 const port7 = 3036;
 const port8 = 3045;
+const port9 = 3046;
+const port10 = 3047;
+const port11 = 3048;
+const port12 = 3049;
 //generating random string for the session:
 const crypto = require('crypto');
 const generateRandomSecret = () => {
@@ -125,7 +129,27 @@ app.get('/hostel_tbl', (req, res) => {
         }
     });
 });
+app.post('admin-module/views/index1.ejs/save', (req, res) => {
+    const tableData = req.body; // Received table data from the front-end
 
+    // Assuming your table has a structure similar to { h_id, h_name, no_floors, no_rooms }
+    const updateQuery = 'UPDATE hostel_master_table SET h_name = ?, no_floors = ?, no_rooms = ? WHERE h_id = ?';
+
+    // Loop through the received table data and update the database accordingly
+    tableData.forEach(rowData => {
+        const { h_id, h_name, no_floors, no_rooms } = rowData;
+        connection.query(updateQuery, [h_name, no_floors, no_rooms, h_id], (err, result) => {
+            if (err) {
+                console.error('Error updating database:', err);
+                return res.status(500).json({ message: 'Failed to save changes to the database' });
+            }
+            console.log(`Row with h_id ${h_id} updated successfully`);
+        });
+    });
+
+    // Respond to the client indicating that changes were saved successfully
+    res.status(200).json({ message: 'Changes saved successfully' });
+});
 // Route for data from warden_master_tbl
 app.get('/warden_tbl', (req, res) => {
     const sql = 'SELECT * FROM warden_master_tbl';
@@ -172,6 +196,7 @@ app.get('/profile',(req,res)=>{
     res.sendFile(__dirname + '/index_aprofile.html');
 });
 
+
 // Start server
 app.listen(port1, () => {
     console.log(`Server is running on http://localhost:${port1}/alogin`);
@@ -211,3 +236,19 @@ app.listen(port7, () => {
 app.listen(port8, () => {
     console.log(`Server is running on http://localhost:${port8}/profile`);
 });
+
+// app.listen(port9, () => {
+//     console.log(`Server listening at http://localhost:${port9}/save`);
+// });
+
+// app.listen(port10, () => {
+//     console.log(`Server listening at http://localhost:${port10}/save`);
+// });
+
+// app.listen(port11, () => {
+//     console.log(`Server listening at http://localhost:${port11}/save`);
+// });
+
+// app.listen(port12, () => {
+//     console.log(`Server listening at http://localhost:${port12}/save`);
+// });
